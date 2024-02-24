@@ -43,6 +43,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'main.apps.MainConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -85,16 +86,16 @@ WSGI_APPLICATION = 'IngredientIntel.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = { #not configured
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "IngredientIntel",
-        "USER": "django-app",
-        "PASSWORD": get_secret("DB_PSWD"),
-        "HOST": "localhost",
-        "PORT": "2204",
-    }
-}
+# DATABASES = { #not configured
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "IngredientIntel",
+#         "USER": "django-app",
+#         "PASSWORD": get_secret("DB_PSWD"),
+#         "HOST": "localhost",
+#         "PORT": "2204",
+#     }
+# }
 
 
 # Password validation

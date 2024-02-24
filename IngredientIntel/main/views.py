@@ -6,16 +6,20 @@ def index(request):
     """
     returns the home page
     """
-    return HttpResponse("hi")
+    return render(request, "main/index.html")
 
 def search_page(request, query):
     """
     returns the page of search results
     """
-    return HttpResponse(query)
+    context = {"query":query}
 
-def result_page(request, type, object):
+    return render(request, "main/search_page.html", context)
+
+def results_page(request, type, object):
     """
     returns the page describing the item, company, or product
     """
-    return HttpResponse(f"type={type}, object={object}")
+    context = {"type": type, "object": object}
+
+    return render(request, "main/results_page.html", context)
