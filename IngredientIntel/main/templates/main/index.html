@@ -26,16 +26,7 @@
             <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
         </ul>
-        <!-- <div class="d-flex">
-          <select class="form-select me-2">
-            <option selected value="">Search by...</option>
-            <option value="ingredient">Ingredient</option>
-            <option value="product">Product</option>
-            <option value="company">Company</option>
-          </select>
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-primary" type="submit">Search</button>
-        </div> -->
+        
         <form method="post" action="{% url 'search_page' %}">
           {% csrf_token %}
           {{ form }}
