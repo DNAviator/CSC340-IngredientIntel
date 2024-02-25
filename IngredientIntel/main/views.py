@@ -12,7 +12,7 @@ def search_page(request, query):
     """
     returns the page of search results
     """
-    context = {"query":query}
+    context = {"result_names":["sugar", "aspertame", "stevia"]}
 
     return render(request, "main/search_page.html", context)
 
