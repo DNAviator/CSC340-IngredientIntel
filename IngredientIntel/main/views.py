@@ -23,3 +23,6 @@ def results_page(request, type, object):
     context = {"type": type, "object": object}
 
     return render(request, "main/results_page.html", context)
+
+def login(request):
+    return render(request, "main/login.html")
