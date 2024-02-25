@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import SearchForm
+from .forms import SearchForm, SettingsForm
 
 # Create your views here.
 def index(request):
@@ -39,3 +39,6 @@ def login(request):
     Runs the login page
     """
     return render(request, "main/login.html")
+
+def settings(request):
+    return render(request, "main/settings.html", {"settings":SettingsForm})
