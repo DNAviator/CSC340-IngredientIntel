@@ -26,10 +26,11 @@ def search_page(request):
     # if there is an invalid input returns the no results page
     return render(request, "main/search_page.html", {"no_results": True})
 
-def results_page(request, type, object):
+def results_page(request, id):
     """
     returns the page describing the item, company, or product
     """
+    
     context = {"type": type, "object": object}
 
     return render(request, "main/results_page.html", context)
