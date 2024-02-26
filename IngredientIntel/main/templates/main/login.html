@@ -13,49 +13,31 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <img class="navbar-brand" src="{% static 'images/INRAM_logo.png' %}" width="50" height="50"
-                alt="InRam Logo">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
-                </ul>
-                
-            </div>
-        </div>
-    </nav>
+    {% include 'nav.html' %}
 
-    <form method="post" action="">
+    <form method="post" action="{% url 'home' %}">
         {% csrf_token %}
-    <div class="container mt-5">
-        <h1 align="center">User Login</h1>
-        <br>
+        <div class="container mt-5">
+            <h1 align="center">User Login</h1>
+            <br>
 
-        <div class="container" align="center">
-            <label for="uname">Username:</label>
-            <input type="username" placeholder="Enter Username" name="username" required><br>
-            <br>
-        
-            <label for="password">Password:</label>
-            <input type="password" placeholder="Enter Password" name="password" required>
-            <br>
-            <br>
-                
-            <a href="{% url 'home' %}" type="submit" class="btn btn-primary ms-2">Login</a>
-          </div>
+            <div class="container" align="center">
+                <label for="uname">Username:</label>
+                <input type="username" placeholder="Enter Username" name="username" required><br>
+                <br>
 
-    </div>
-    <p align="center">
-        
-    </p>
+                <label for="password">Password:</label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+                <br>
+                <br>
+
+                <button type="submit" class="btn btn-primary ms-2">Login</a>
+            </div>
+
+        </div>
+        <p align="center">
+
+        </p>
     </form>
 
 
