@@ -28,24 +28,16 @@
   </nav>
 
   <div class="container mt-5">
-    <h1>Datasheet</h1>
+    <h1>{{ type }} Datasheet</h1>
 
     <table class="table">
-      <thead>
+      {% for key, item in info.items %}
+        <thead>
         <tr>
-          <th>Column 1</th>
-          <th>Column 2</th>
-          <th>Column 3</th>
+          <th>{{key}}: {{ item }}</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>Data 1</td>
-          <td>Data 2</td>
-          <td>Data 3</td>
-        </tr>
-      </tbody>
-    </table>
+    {% endfor %}
   </div>
 
   <footer class="footer">
