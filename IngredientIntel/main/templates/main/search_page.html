@@ -36,7 +36,7 @@
 
     {% for result in result_names %}
       <div class="search-results">
-        <a href="#">{{ result }}</a>
+        <a href="{% url 'result_page' type 1 %}">{{ result }}</a>
         <div class="additional-info">placeholder text</div></div>
     {% endfor %}
   </div>

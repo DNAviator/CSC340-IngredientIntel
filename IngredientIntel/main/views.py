@@ -21,16 +21,24 @@ def search_page(request):
             search_query = form.cleaned_data['search_query']
 
             # Process search logic based on criteria and query
-            context = {"result_names":["sugar", "aspertame", "stevia"], "Type":search_criteria, "query":search_query, "no_results": False}
+            context = {"result_names":["sugar", "aspertame", "stevia"], "type":search_criteria, "query":search_query, "no_results": False}
             return render(request, "main/search_page.html", context)
     # if there is an invalid input returns the no results page
     return render(request, "main/search_page.html", {"no_results": True})
 
-def results_page(request, type, object):
+def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
-    context = {"type": type, "object": object}
+    #hardcoded info
+    info = {
+        "name":"Sugar",
+        "purpose":"To sweeten product",
+        "warnings":"May cause hyperglycemia and increase heart rate",
+        "notes":"Research articles: [link1, link2, link3]",
+        "num_products":100000,
+    }
+    context = {"type": type, "info": info}
 
     return render(request, "main/results_page.html", context)
 
