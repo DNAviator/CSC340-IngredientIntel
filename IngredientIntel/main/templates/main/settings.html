@@ -28,7 +28,7 @@
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                 </ul>
-                <a href="{% url 'login' %}" class="btn btn-primary ms-2">Login</a>
+                <a href="{% url 'login' %}" class="btn btn-primary ms-2"></a>
             </div>
         </div>
     </nav>
@@ -36,23 +36,35 @@
     <form method="post" action="">
         {% csrf_token %}
     <div class="container mt-5">
-        <h1>Datasheet</h1>
+        <h1>Settings</h1>
 
         <table class="table">
             <thead>
                 <tr>
+                    <td><label for="display_mode"></label>Color Scheme:</td>
                     <td>{{ settings.display_mode }}</td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ settings.hidden_items }}</td>
+                    <td><label for="diet_mode"></label> Diet Restrictions:</td>
+                    <td>{{ settings.diet_mode }}</td>
                 </tr>
+
+                <tr>
+                    <td><label for="new_name"></label>New Name:</td>
+                    <td>{{ settings.new_name }}</td>
+                </tr>
+
             </tbody>
         </table>
     </div>
-        <button class="btn btn-primary" type="submit">Save</button>
+    <p align="center">
+        <a href="{% url 'home' %}" type="submit" class="btn btn-primary ms-2">Save</a>
+    </p>
     </form>
+
+
     <footer class="footer">
         Copyright &copy; 2024 InRam
     </footer>
