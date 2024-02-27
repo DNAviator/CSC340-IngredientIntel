@@ -72,4 +72,11 @@ body {
   border-radius: 3px;
   /* Adjust styles for input fields and select element */
 }
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  /* Adjust height as desired */
+}
 
