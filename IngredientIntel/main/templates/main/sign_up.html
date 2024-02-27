@@ -1,27 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Ingredient Intel</title>
-    <link rel="stylesheet" href="{% static 'primary.css' %}">
-    <style> 
-        
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Sign Up{%endblock%}
 
-    {% include 'nav.html' %}
-    <!-- <div class="banner">
-        <a href="index.html">Home</a>
-        <a href="sign_up.html">Sign Up</a>
-        <a href="login.html">Login</a>
-        <a href="results_page.html">Results Page</a>
-        <a href="search_page.html">Search Page</a>
-        <a href="settings.html">Settings</a>
-    </div> -->
-    <div class="form-container">
+{% block content %}
+    <div class="container">
         <h1>Sign Up for Ingredient Intel</h1>
         <form action="home.html" method="post">
             <label for="username">Username</label>
@@ -40,3 +21,4 @@
     </div>
 </body>
 </html>
+{%endblock%}
