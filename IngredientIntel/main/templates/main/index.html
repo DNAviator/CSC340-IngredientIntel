@@ -3,7 +3,11 @@
 
 {% block content %}
 <div class="container mt-5">
-  <p>Your website content goes here...</p>
+  <h1>Welcome to Ingredient Intel</h1>
+  <p>Helping you make more informed choices</p>
+    <form action="{% url 'sign_up' %}">
+        <button type="submit" class="btn btn-primary">Get Started Today</button>
+    </form>
 </div>
 
 {% endblock %}
