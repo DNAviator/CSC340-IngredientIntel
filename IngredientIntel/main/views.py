@@ -52,3 +52,9 @@ def settings(request):
 
 def sign_up(request):
     return render(request, "main/sign_up.html")
+
+def researcher(request):
+    return render(request, "main/researcher.html")
+
+def company(request):
+    return render(request, "main/company.html")
