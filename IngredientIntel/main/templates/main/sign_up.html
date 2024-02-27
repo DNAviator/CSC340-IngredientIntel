@@ -5,24 +5,34 @@
     <link rel="stylesheet" href="{% static 'signup.css' %}">
 {% endblock %}
 {% block content %}
-    
-
-    <div class="container">
+<form action="{% url 'home' %}" method="post">
+    <div class="container" align = "center">
         <h1>Sign Up for Ingredient Intel</h1>
-        <form action="home.html" method="post">
+        
+
             <label for="username">Username</label>
             <input class="centerform" type="text" id="username" name="username" placeholder="Enter your username" required><br>
-
+            <br>
             <label for="email">Email Address</label>
             <input class="centerform" type="email" id="email" name="email" placeholder="Enter your email address" required><br>
-
+            <br>
             <label for="password">Password</label>
             <input class="centerform" type="password" id="password" name="password" placeholder="Enter your password" required><br>
-
+            <br>
+            <label for = "main_use">What do you mainly use this for?</label>
+            <select id = "use">
+                <option value="blank"> Choose one</option>
+                <option value = "Researcher"> Researcher </option>
+                <option value = "Company"> Company </option>
+                <option value = "Individual user"> Individual</option>
+            </select>
+            <br>
             <input type="submit" value="Sign Up">
 
 
-        </form>
+        
     </div>
-    
-{% endblock %}
+</form>
+</body>
+</html>
+{%endblock%}
