@@ -52,3 +52,6 @@ def settings(request):
 
 def sign_up(request):
     return render(request, "main/sign_up.html")
+
+def scan_barcode(request):
+    return render(request, "main/scan_barcode.html")
