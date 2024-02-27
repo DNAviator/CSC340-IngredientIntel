@@ -2,3 +2,14 @@
 {% load static %}
 {% block title %}Researcher{%endblock%}
 
+{% block content %}
+    <div class="message-bar">
+        API Key (keep this secret): asf3or89ho312hf89wgfhodf:AILFuoiLFKhjaogfy89ufoijldnflkadf
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
