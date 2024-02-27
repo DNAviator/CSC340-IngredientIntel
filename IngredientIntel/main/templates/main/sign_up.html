@@ -1,24 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Sign Up{%endblock%}
-
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+{% endblock %}
 {% block content %}
+    
+
     <div class="container">
         <h1>Sign Up for Ingredient Intel</h1>
         <form action="home.html" method="post">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required><br>
+            <input class="centerform" type="text" id="username" name="username" placeholder="Enter your username" required><br>
 
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email address" required><br>
+            <input class="centerform" type="email" id="email" name="email" placeholder="Enter your email address" required><br>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required><br>
+            <input class="centerform" type="password" id="password" name="password" placeholder="Enter your password" required><br>
 
             <input type="submit" value="Sign Up">
 
 
         </form>
     </div>
-</body>
-</html>
-{%endblock%}
+    
+{% endblock %}
