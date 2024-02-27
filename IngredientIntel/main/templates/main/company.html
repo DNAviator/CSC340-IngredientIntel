@@ -3,24 +3,34 @@
 {% block title %}Company Page{%endblock%}
 
 {% block content %}
+<style>
+    .banner {
+        background-color: rgb(0, 140, 255);
+        color: white;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
 <div class="container">
-    <h1>Welcome, Google!</h1>
+    <div class="banner">
+        <h1>Welcome, Google!</h1>
+    </div>
     <p>You can create your products here:</p>
-    
+
     <form method="post" action="{% url 'company' %}">
         {% csrf_token %}
         <label for="ingredient">Product Name:</label>
         <input type="text" id="ingredient" name="ingredient" required><br><br>
-        
+
         <label for="author">Author:</label>
         <input type="text" id="author" name="author" required><br><br>
 
-        <label for="author">Author:</label>
-        <input type="text">
-        
+        <label for="warnings">Warnings:</label>
+        <input type="text" id="warnings" name="warnings"><br><br>
+
         <label for="content">Note Content:</label><br>
         <textarea id="content" name="content" rows="5" required></textarea><br><br>
-        
+
         <button type="submit">Create Product</button>
     </form>
 </div>

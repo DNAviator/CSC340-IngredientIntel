@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title%}Home{% endblock%}
+{%load static%}
 
 {% block content %}
 <div class="container mt-5">
@@ -15,4 +16,5 @@
     <button type="submit" class="btn btn-primary">Scan Barcode</button>
   </form>
 </div>
+<div class="container"><img src="{% static 'images/happy_earth.png' %}" alt="A happy healthy earth" style="float: right; margin-left: 10px"></div>
 {% endblock %}
