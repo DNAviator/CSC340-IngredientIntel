@@ -7,8 +7,7 @@ def index(request):
     """
     returns the home page
     """
-    context = {"form":SearchForm}
-    return render(request, "main/index.html", context)
+    return render(request, "main/index.html")
 
 def search_page(request):
     """
