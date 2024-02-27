@@ -11,4 +11,6 @@ urlpatterns = [
     path("sign_up/", views.sign_up, name="sign_up"),
     path("scan_barcode/", views.scan_barcode, name="scan_barcode"),
     
+    path("researcher/", views.researcher, name="researcher"),
+    path("company/", views.company, name="company"),
 ]

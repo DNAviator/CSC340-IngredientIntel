@@ -55,3 +55,8 @@ def sign_up(request):
 
 def scan_barcode(request):
     return render(request, "main/scan_barcode.html")
+def researcher(request):
+    return render(request, "main/researcher.html")
+
+def company(request):
+    return render(request, "main/company.html")
