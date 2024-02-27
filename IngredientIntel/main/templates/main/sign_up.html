@@ -6,6 +6,7 @@
 {% endblock %}
 {% block content %}
 <form action="{% url 'home' %}" method="post">
+    {% csrf_token %}
     <div class="container" align = "center">
         <h1>Sign Up for Ingredient Intel</h1>
         
@@ -26,6 +27,7 @@
                 <option value = "Company"> Company </option>
                 <option value = "Individual user"> Individual</option>
             </select>
+            <br>
             <br>
             <input type="submit" value="Sign Up">
 
