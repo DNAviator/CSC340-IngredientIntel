@@ -11,7 +11,7 @@
   <br>
   <form method="post" enctype="multipart/form-data" action="{% url 'scan_barcode' %}">
     {% csrf_token %}
-    <input type="file" name="barcode_image">
+    
     <button type="submit" class="btn btn-primary">Scan Barcode</button>
   </form>
 </div>

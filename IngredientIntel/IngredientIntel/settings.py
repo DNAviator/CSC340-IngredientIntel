@@ -87,6 +87,14 @@ WSGI_APPLICATION = 'IngredientIntel.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+# Not actual database used for test server
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
+}
 # DATABASES = { #not configured
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql",
