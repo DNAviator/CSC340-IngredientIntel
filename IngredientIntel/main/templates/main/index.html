@@ -5,9 +5,14 @@
 <div class="container mt-5">
   <h1>Welcome to Ingredient Intel</h1>
   <p>Helping you make more informed choices</p>
-    <form action="{% url 'sign_up' %}">
-        <button type="submit" class="btn btn-primary">Get Started Today</button>
-    </form>
+  <form action="{% url 'sign_up' %}">
+    <button type="submit" class="btn btn-primary">Get Started Today</button>
+  </form>
+  <br>
+  <form method="post" enctype="multipart/form-data" action="{% url 'scan_barcode' %}">
+    {% csrf_token %}
+    
+    <button type="submit" class="btn btn-primary">Scan Barcode</button>
+  </form>
 </div>
-
 {% endblock %}
