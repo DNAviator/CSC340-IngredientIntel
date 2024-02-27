@@ -4,8 +4,22 @@
 {% block title %}Researcher{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Welcome, Researcher!</h1>
+
+{% block extra_css %}
+<style>
+.banner {
+    background-color: blue;
+    color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+</style>
+{% endblock %}
+    <div class="banner">
+        <h1>Welcome, Researcher!</h1>
+    </div>
+    
+    <div class="container">
     <p>You can publish your scientific notes regarding specific ingredients here:</p>
     
     <form method="post" action="{% url 'researcher' %}">
