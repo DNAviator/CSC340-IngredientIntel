@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Researcher{% endblock %}
+
+{% block content %}
+
+{% block extra_css %}
+<style>
+.banner {
+    background-color: rgb(0, 140, 255);
+    color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+</style>
+{% endblock %}
+    <div class="banner">
+        <h1>Welcome, Researcher!</h1>
+    </div>
+    
+    <div class="container">
+    <p>You can publish your scientific notes regarding specific ingredients here:</p>
+    
+    <form method="post" action="{% url 'researcher' %}">
+        {% csrf_token %}
+        <label for="ingredient">Ingredient:</label>
+        <input type="text" id="ingredient" name="ingredient" required><br><br>
+        
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" required><br><br>
+        
+        <label for="content">Note Content:</label><br>
+        <textarea id="content" name="content" rows="5" required></textarea><br><br>
+        
+        <button type="submit">Publish Note</button>
+    </form>
+</div>
+{% endblock %}
