@@ -50,3 +50,6 @@ def login(request):
 
 def settings(request):
     return render(request, "main/settings.html", {"settings":SettingsForm})
+
+def sign_up(request):
+    return render(request, "main/sign_up.html")
