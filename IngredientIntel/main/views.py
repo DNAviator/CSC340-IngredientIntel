@@ -61,3 +61,6 @@ def researcher(request):
 def company(request):
     
     return render(request, "main/company.html")
+
+def about(request):
+    return render(request, "main/about.html")
