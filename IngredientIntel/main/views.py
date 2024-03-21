@@ -1,6 +1,30 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import SearchForm, SettingsForm
+from .models import *
+from django.db.models import F
+from django.apps import apps
+
+# general search function (currently causing an error)
+def search_db(model, query, page=1):
+
+        modelFromStr = apps.get_model('main', model)
+        # ranks all results with Levenshtein distance function to query
+        result = modelFromStr.objects.annotate(
+            rank= Levenshtein(modelFromStr.name, query)
+        ).order_by('rank')
+
+        # page number used to generate the set of results to see
+        startIndex = 25 * (page - 1)
+        
+        # checks if indexes are in bounds and returns best array slice
+        if startIndex > result.count():
+            return []
+        elif startIndex + 25 > result.count():
+            return result[startIndex:len(result)-1]
+        
+        return result[startIndex:startIndex+25]
+
 
 # Create your views here.
 def index(request):
@@ -9,7 +33,7 @@ def index(request):
     """
     return render(request, "main/index.html")
 
-def search_page(request):
+def search_page(request, page=1):
     """
     returns the page of search results
     """
@@ -19,11 +43,14 @@ def search_page(request):
             search_criteria = form.cleaned_data['search_criteria']
             search_query = form.cleaned_data['search_query']
 
+            search_results = search_db(search_criteria, search_query, page)
+
             # Process search logic based on criteria and query
-            context = {"result_names":["sugar", "aspertame", "stevia"], "type":search_criteria, "query":search_query, "no_results": False}
+            context = {"results":search_results, "type":search_criteria, "query":search_query}
             return render(request, "main/search_page.html", context)
+        
     # if there is an invalid input returns the no results page
-    return render(request, "main/search_page.html", {"no_results": True})
+    return render(request, "main/search_page.html", {"results": False})
 
 def results_page(request, type, id):
     """

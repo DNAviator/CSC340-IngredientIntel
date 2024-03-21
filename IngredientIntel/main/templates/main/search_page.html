@@ -2,19 +2,21 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
-    <h1>{{type}} Search Results</h1>
-    {% if result_names %}
+<div class="container mt-5">
+  <h1>{{type}} Search Results</h1>
 
-      {% for result in result_names %}
-    <div class="search-results">
-      <a href="{% url 'result_page' type 1 %}">{{ result }}</a>
-      <div class="additional-info">placeholder text</div>
-    </div>
-      {% endfor %}
+  {% if results %}
+  {% for result in results %}
 
-    {% else %}
-      <div class="search-results">No Results found</div>
-    {% endif %}
+  <div class="search-results">
+    <a href="{% url 'result_page' type result.id %}">{{ result.name }}</a>
+
+    <div class="additional-info">placeholder text</div>
   </div>
+  {% endfor %}
+
+  {% else %}
+  <div class="search-results">No Results found</div>
+  {% endif %}
+</div>
 {% endblock %}
