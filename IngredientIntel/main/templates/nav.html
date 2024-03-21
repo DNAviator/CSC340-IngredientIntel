@@ -13,11 +13,21 @@
           <a class="nav-link" href="{% url 'about' %}">About</a>
         </ul>
 
-        <form class="search-container" method="post" action="{% url 'search_page' %}">
+        <form class="search-container" action="{% url 'search_page' %}" method="get">
+          <input type="text" name="query" placeholder="Enter search query...">
+          <select name="model" id="search_type" required>
+            <option value="Ingredient">Ingredient</option>
+            <option value="Product">Product</option>
+            <option value="Company">Company</option>
+          </select>
+          <button class="nav-link" type="submit">Search</button>
+        </form>
+
+        <!-- <form class="search-container" method="post" action="{% url 'search_page' %}">
           {% csrf_token %}
           {{ search_form }}
           <button class="nav-link" type="submit">Search</button>
-        </form>
+        </form> -->
         <a href="{% url 'login' %}" class="nav-link ms-2">Login / Sign Up</a>
         <a class="nav-link ms-2" aria-current="page" href="{% url 'settings' %}">Settings</a>
 

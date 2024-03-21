@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(Ingredient)
 admin.site.register(Company)
 admin.site.register(Product)
+admin.site.register(SCINote)

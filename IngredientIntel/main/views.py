@@ -4,26 +4,8 @@ from .forms import SearchForm, SettingsForm
 from .models import *
 from django.db.models import F
 from django.apps import apps
-
-# general search function (currently causing an error)
-def search_db(model, query, page=1):
-
-        modelFromStr = apps.get_model('main', model)
-        # ranks all results with Levenshtein distance function to query
-        result = modelFromStr.objects.annotate(
-            rank= Levenshtein(modelFromStr.name, query)
-        ).order_by('rank')
-
-        # page number used to generate the set of results to see
-        startIndex = 25 * (page - 1)
-        
-        # checks if indexes are in bounds and returns best array slice
-        if startIndex > result.count():
-            return []
-        elif startIndex + 25 > result.count():
-            return result[startIndex:len(result)-1]
-        
-        return result[startIndex:startIndex+25]
+from django.core.paginator import Paginator
+from django.views.generic import ListView
 
 
 # Create your views here.
@@ -33,24 +15,26 @@ def index(request):
     """
     return render(request, "main/index.html")
 
-def search_page(request, page=1):
-    """
-    returns the page of search results
-    """
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            search_criteria = form.cleaned_data['search_criteria']
-            search_query = form.cleaned_data['search_query']
 
-            search_results = search_db(search_criteria, search_query, page)
+def search_page(request):
 
-            # Process search logic based on criteria and query
-            context = {"results":search_results, "type":search_criteria, "query":search_query}
-            return render(request, "main/search_page.html", context)
-        
-    # if there is an invalid input returns the no results page
-    return render(request, "main/search_page.html", {"results": False})
+    # get model results based off get params
+    search_criteria = request.GET.get('model')                  # gets from the url the model specified
+    search_query = request.GET.get('query')                     # gets from the url the search query
+
+    model = apps.get_model('main', search_criteria)
+    search_results = model.search_db(search_query)
+
+    print(search_results)
+
+    # create paginator to manage the multiple pages of results
+    paginator = Paginator(search_results, 2)                    # paginator class from django show 2 results of the model output
+    page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
+    page_obj = paginator.get_page(page_number)                  # paginator returns the page data
+
+    # render page
+    return render(request, "main/search_page.html", {"page_obj": page_obj})
+
 
 def results_page(request, type, id):
     """

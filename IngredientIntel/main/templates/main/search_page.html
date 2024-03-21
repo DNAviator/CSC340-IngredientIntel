@@ -1,22 +1,31 @@
 {% extends 'base.html' %}
 {% block title %}Search{% endblock %}
 
+
 {% block content %}
-<div class="container mt-5">
-  <h1>{{type}} Search Results</h1>
+{% for result in page_obj.object_list %}
 
-  {% if results %}
-  {% for result in results %}
+    {{ result.name }}<br>
 
-  <div class="search-results">
-    <a href="{% url 'result_page' type result.id %}">{{ result.name }}</a>
+{% endfor %}
 
-    <div class="additional-info">placeholder text</div>
-  </div>
-  {% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
 
-  {% else %}
-  <div class="search-results">No Results found</div>
-  {% endif %}
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
 </div>
 {% endblock %}
+
+
