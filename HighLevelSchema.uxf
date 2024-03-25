@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>150</x><y>120</y><w>210</w><h>190</h></coordinates><panel_attributes>Ingredients
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>0</x><y>110</y><w>210</w><h>190</h></coordinates><panel_attributes>Ingredients
 --
 -id: Long
 --
@@ -7,17 +7,13 @@
 --
 Responsibilities
 -- Resp1
-*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>480</x><y>120</y><w>210</w><h>190</h></coordinates><panel_attributes>Company
+*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>330</x><y>110</y><w>210</w><h>190</h></coordinates><panel_attributes>Company
 --
 -id: Long
-_-ClassAttribute: Long_
---
-#Operation(i: int): int
-/+AbstractOperation()/
---
-Responsibilities
--- Resp1
-*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>880</x><y>110</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+-name: string
+-products: Product
+-date founded: Date
+-notes: .txt(blank=True)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>730</x><y>100</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Stereotype&gt;&gt;
 Package::FatClass
 {Some Properties}
 --
@@ -29,4 +25,11 @@ _-ClassAttribute: Long_
 --
 Responsibilities
 -- Resp1
-*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>190</y><w>150</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;130;10</additional_attributes></element></diagram>
+*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>160</y><w>150</w><h>260</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;240;70;240;70;10;130;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>340</y><w>210</w><h>190</h></coordinates><panel_attributes>Products
+--
+-id: Long
+-Name: Char (255 max)
+-Producing company: Company
+-Ingredients: Ingredient
+-warnings: .txt(blank=True)
+-notes: .txt(blank=True)</panel_attributes><additional_attributes></additional_attributes></element></diagram>
