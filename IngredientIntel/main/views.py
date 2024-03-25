@@ -6,6 +6,8 @@ from django.db.models import F
 from django.apps import apps
 from django.core.paginator import Paginator
 from django.views.generic import ListView
+from django.utils.http import urlencode
+
 
 
 # Create your views here.
@@ -32,8 +34,8 @@ def search_page(request):
     page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
     page_obj = paginator.get_page(page_number)                  # paginator returns the page data
 
-    # render page
-    return render(request, "main/search_page.html", {"page_obj": page_obj})
+    # render page (added params to keep search paramaters through the different pages.
+    return render(request, "main/search_page.html", {"page_obj": page_obj, "params":urlencode({"model":search_criteria, "query":search_query})})
 
 
 def results_page(request, type, id):
@@ -66,11 +68,11 @@ def sign_up(request):
 
 def scan_barcode(request):
     return render(request, "main/scan_barcode.html")
+
 def researcher(request):
     return render(request, "main/researcher.html")
 
 def company(request):
-    
     return render(request, "main/company.html")
 
 def about(request):
