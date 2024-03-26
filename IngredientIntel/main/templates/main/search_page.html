@@ -3,9 +3,12 @@
 
 
 {% block content %}
-{% for result in page_obj.object_list %}
 
-    {{ result.name }}<br>
+{% if page_obj %}
+{% for result in page_obj %}
+    <div class="search-results">
+        <a href="{% url 'result_page' model result.id %}">{{ result.name }}</a>
+    </div>
 
 {% endfor %}
 
@@ -26,6 +29,9 @@
         {% endif %}
     </span>
 </div>
+{% else %}
+    <p>No Results</p>
+{% endif %}
 {% endblock %}
 
 

@@ -13,12 +13,12 @@
 -date founded: Date
 -notes: .txt(blank=True)
 --
-#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>945</x><y>112</y><w>147</w><h>133</h></coordinates><panel_attributes>User
+#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>889</x><y>42</y><w>147</w><h>133</h></coordinates><panel_attributes>User
 --
 -id: Long
 -username: Char (max=255)
 -password: C
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>126</x><y>210</y><w>175</w><h>133</h></coordinates><panel_attributes>Products
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>126</x><y>217</y><w>175</w><h>133</h></coordinates><panel_attributes>Products
 --
 -id: Long
 -Name: Char (255 max)
@@ -34,4 +34,6 @@
 -Institution name: .txt(blank=True)
 -Content: .txt
 -Citations: .txt(blank=True)
--Ingredient: Ingredient</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>77</x><y>259</y><w>294</w><h>224</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>400;300;10;300;10;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>217</y><w>77</w><h>56</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;50;10;50;60;90;60</additional_attributes></element><element><id>Relation</id><coordinates><x>525</x><y>287</y><w>63</w><h>238</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;320;40;320;40;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>252</y><w>77</w><h>21</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element></diagram>
+-Ingredient: Ingredient</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>77</x><y>266</y><w>294</w><h>217</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>400;290;10;290;10;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>224</y><w>77</w><h>49</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;50;10;50;50;90;50</additional_attributes></element><element><id>Relation</id><coordinates><x>525</x><y>287</y><w>63</w><h>238</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;320;40;320;40;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>252</y><w>77</w><h>21</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>889</x><y>210</y><w>147</w><h>133</h></coordinates><panel_attributes>Authenitcated
+--
+</panel_attributes><additional_attributes></additional_attributes></element></diagram>

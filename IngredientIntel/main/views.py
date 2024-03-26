@@ -20,23 +20,24 @@ def index(request):
 
 def search_page(request):
 
-    # get model results based off get params
-    search_criteria = request.GET.get('model')                  # gets from the url the model specified
-    search_query = request.GET.get('query')                     # gets from the url the search query
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        # get model results based off get params
+        search_model = request.GET.get('model')                  # gets from the url the model specified
+        search_query = request.GET.get('query')                     # gets from the url the search query
 
-    model = apps.get_model('main', search_criteria)
-    search_results = model.search_db(search_query)
+        model_obj = apps.get_model('main', search_model)
+        search_results = model_obj.search_db(model_obj, "name", search_query)
 
-    print(search_results)
+        # create paginator to manage the multiple pages of results
+        paginator = Paginator(search_results, 10)                    # paginator class from django show 2 results of the model output
+        page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
+        page_obj = paginator.get_page(page_number)                  # paginator returns the page data
 
-    # create paginator to manage the multiple pages of results
-    paginator = Paginator(search_results, 2)                    # paginator class from django show 2 results of the model output
-    page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
-    page_obj = paginator.get_page(page_number)                  # paginator returns the page data
-
-    # render page (added params to keep search paramaters through the different pages.
-    return render(request, "main/search_page.html", {"page_obj": page_obj, "params":urlencode({"model":search_criteria, "query":search_query})})
-
+        # render page (added params to keep search paramaters through the different pages.
+        return render(request, "main/search_page.html", {"page_obj": page_obj, "model": search_model, "params":urlencode({"model":search_model, "query":search_query})})
+    else:
+        return render(request, "main/search_page.html")
 
 def results_page(request, type, id):
     """

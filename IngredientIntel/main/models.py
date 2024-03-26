@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models import Func, IntegerField
+from django.db.models import Func, F
+from django.db.models.functions import Cast
 
 class Levenshtein(Func):
     """
@@ -19,7 +20,6 @@ class Levenshtein(Func):
         super(Levenshtein, self).__init__(
             expression,
             search_term=search_term,
-            output_field=IntegerField(),  # Specify the output field type
             **extras
         )
 
@@ -43,11 +43,12 @@ class Ingredient(models.Model):
     notes = models.ManyToManyField('SCINote', related_name='notes', blank=True)
 
     # general search function
-    def search_db(query):
+    def search_db(self, search_criteria, query):
         # ranks all results with Levenshtein distance function to query
         result = Ingredient.objects.annotate(
-            rank= Levenshtein(Ingredient.name, query)
+            rank = Cast(Levenshtein(F(search_criteria), query), output_field=models.IntegerField())
         ).order_by('rank')
+
         return result
 
     def __str__(self):
@@ -75,10 +76,10 @@ class Company(models.Model):
     notes = models.TextField(blank=True)
 
     # general search function
-    def search_db(query):
+    def search_db(self, query):
         # ranks all results with Levenshtein distance function to query
         result = Company.objects.annotate(
-            rank= Levenshtein(Company.name, query)
+            rank=Cast(Levenshtein(Company.name, query), output_field=models.IntegerField())
         ).order_by('rank')
         return result
 
@@ -103,10 +104,10 @@ class Product(models.Model):
     """
 
     # general search function
-    def search_db(query):
+    def search_db(self, query):
         # ranks all results with Levenshtein distance function to query
         result = Product.objects.annotate(
-            rank= Levenshtein(Product.name, query)
+            rank= Cast(Levenshtein(Product.name, query), output_field=models.IntegerField())
         ).order_by('rank')
         
         return result

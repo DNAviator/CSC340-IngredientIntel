@@ -14,12 +14,7 @@
         </ul>
 
         <form class="search-container" action="{% url 'search_page' %}" method="get">
-          <input type="text" name="query" placeholder="Enter search query...">
-          <select name="model" id="search_type" required>
-            <option value="Ingredient">Ingredient</option>
-            <option value="Product">Product</option>
-            <option value="Company">Company</option>
-          </select>
+          {{ search_form }}
           <button class="nav-link" type="submit">Search</button>
         </form>
 
