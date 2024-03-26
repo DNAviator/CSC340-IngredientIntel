@@ -1,11 +1,11 @@
-<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><element><id>UMLClass</id><coordinates><x>162</x><y>54</y><w>225</w><h>171</h></coordinates><panel_attributes>Ingredients
+<diagram program="umletino" version="15.1"><zoom_level>7</zoom_level><element><id>UMLClass</id><coordinates><x>357</x><y>455</y><w>175</w><h>119</h></coordinates><panel_attributes>Ingredients
 --
 -id: Long
 -name: Char(max=255, unique=True)
 -warnings: .txt(blank=True)
 -notes: SCINote(blank=True)
 --
-#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>162</x><y>468</y><w>225</w><h>171</h></coordinates><panel_attributes>Company
+#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>357</x><y>217</y><w>175</w><h>133</h></coordinates><panel_attributes>Company
 --
 -id: Long
 -name: string
@@ -13,11 +13,12 @@
 -date founded: Date
 -notes: .txt(blank=True)
 --
-#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>477</x><y>54</y><w>189</w><h>171</h></coordinates><panel_attributes>User
+#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>945</x><y>112</y><w>147</w><h>133</h></coordinates><panel_attributes>User
 --
 -id: Long
 -username: Char (max=255)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>162</x><y>261</y><w>225</w><h>171</h></coordinates><panel_attributes>Products
+-password: C
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>126</x><y>210</y><w>175</w><h>133</h></coordinates><panel_attributes>Products
 --
 -id: Long
 -Name: Char (255 max)
@@ -26,11 +27,11 @@
 -warnings: .txt(blank=True)
 -notes: .txt(blank=True)
 --
-#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>162</x><y>657</y><w>225</w><h>171</h></coordinates><panel_attributes>SCINotes
+#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>574</x><y>217</y><w>175</w><h>133</h></coordinates><panel_attributes>SCINotes
 --
 -id: Long
 -Researcher names: .txt
 -Institution name: .txt(blank=True)
 -Content: .txt
 -Citations: .txt(blank=True)
--Ingredient: Ingredient</panel_attributes><additional_attributes></additional_attributes></element></diagram>
+-Ingredient: Ingredient</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>77</x><y>259</y><w>294</w><h>224</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>400;300;10;300;10;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>217</y><w>77</w><h>56</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;50;10;50;60;90;60</additional_attributes></element><element><id>Relation</id><coordinates><x>525</x><y>287</y><w>63</w><h>238</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;320;40;320;40;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>252</y><w>77</w><h>21</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element></diagram>
