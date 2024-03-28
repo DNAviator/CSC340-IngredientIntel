@@ -76,12 +76,22 @@ class Company(models.Model):
     notes = models.TextField(blank=True)
 
     # general search function
-    def search_db(self, query):
+    # def search_db(self, query):
+    #     # ranks all results with Levenshtein distance function to query
+    #     result = Company.objects.annotate(
+    #         rank=Cast(Levenshtein(Company.name, query), output_field=models.IntegerField())
+    #     ).order_by('rank')
+    #     return result
+    # general search function
+    def search_db(self, search_criteria, query):
         # ranks all results with Levenshtein distance function to query
         result = Company.objects.annotate(
-            rank=Cast(Levenshtein(Company.name, query), output_field=models.IntegerField())
+            rank = Cast(Levenshtein(F(search_criteria), query), output_field=models.IntegerField())
         ).order_by('rank')
+
         return result
+
+
 
     def __str__(self):
         """Return a human-readable representation of the company object."""
@@ -103,13 +113,21 @@ class Product(models.Model):
         notes (models.TextField): Additional notes or comments about the product from the producing company. This field is optional.
     """
 
-    # general search function
-    def search_db(self, query):
+    # # general search function
+    # def search_db(self, query):
+    #     # ranks all results with Levenshtein distance function to query
+    #     result = Product.objects.annotate(
+    #         rank= Cast(Levenshtein(Product.name, query), output_field=models.IntegerField())
+    #     ).order_by('rank')
+        
+    #     return result
+        # general search function
+    def search_db(self, search_criteria, query):
         # ranks all results with Levenshtein distance function to query
         result = Product.objects.annotate(
-            rank= Cast(Levenshtein(Product.name, query), output_field=models.IntegerField())
+            rank = Cast(Levenshtein(F(search_criteria), query), output_field=models.IntegerField())
         ).order_by('rank')
-        
+
         return result
 
 
@@ -118,6 +136,7 @@ class Product(models.Model):
     ingredients = models.ManyToManyField(Ingredient)
     warnings = models.TextField(blank=True)
     notes = models.TextField(blank=True)
+    #item_id = models.CharField(max_length=255)
 
     def __str__(self):
         """Return a human-readable representation of the product object."""

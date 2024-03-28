@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 with open(os.path.join(BASE_DIR.parent, 'secrets.json')) as secrets_file:
     secrets = json.load(secrets_file)
 
+
 def get_secret(setting, secrets=secrets):
     """Get secret setting or fail with ImproperlyConfigured"""
     try:
@@ -136,6 +137,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#Images (static/images/)
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

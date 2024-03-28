@@ -7,7 +7,7 @@ from django.apps import apps
 from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.utils.http import urlencode
-
+from .bar_decoder import barcode_decoder
 
 
 # Create your views here.
@@ -43,8 +43,10 @@ def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
+    
     #hardcoded info
     info = {
+        
         "name":"Sugar",
         "purpose":"To sweeten product",
         "warnings":"May cause hyperglycemia and increase heart rate",
@@ -68,6 +70,7 @@ def sign_up(request):
     return render(request, "main/sign_up.html")
 
 def scan_barcode(request):
+    
     return render(request, "main/scan_barcode.html")
 
 def researcher(request):
