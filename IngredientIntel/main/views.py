@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import HttpResponse
 from .forms import SearchForm, SettingsForm
 from .models import *
@@ -43,16 +43,10 @@ def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
-    
-    #hardcoded info
-    info = {
-        
-        "name":"Sugar",
-        "purpose":"To sweeten product",
-        "warnings":"May cause hyperglycemia and increase heart rate",
-        "notes":"Research articles: [link1, link2, link3]",
-        "num_products":100000,
-    }
+
+    #Get the model from the type, get the exact item or return 404    
+    model_obj = apps.get_model('main', type)
+    info = get_object_or_404(model_obj, IntLibID=id)
     context = {"type": type, "info": info}
 
     return render(request, "main/results_page.html", context)
