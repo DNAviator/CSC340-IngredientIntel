@@ -46,7 +46,7 @@ def results_page(request, type, id):
 
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
-    info = get_object_or_404(model_obj, IntLibID=id)
+    info = get_object_or_404(model_obj, pk=id)
     context = {"type": type, "info": info}
 
     return render(request, "main/results_page.html", context)
