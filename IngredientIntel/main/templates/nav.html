@@ -23,7 +23,11 @@
           {{ search_form }}
           <button class="nav-link" type="submit">Search</button>
         </form> -->
-        <a href="{% url 'login' %}" class="nav-link ms-2">Login / Sign Up</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="nav-link ms-2">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link ms-2">Login</a>
+        {% endif %}
         <a class="nav-link ms-2" aria-current="page" href="{% url 'settings' %}">Settings</a>
 
       </div>

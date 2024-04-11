@@ -73,6 +73,12 @@ def login_page(request):
     else:
         return render(request, "main/login.html")
 
+def logout_page(request):
+    logout(request)
+    messages.success(request, ("Logged Out"))
+    return redirect('home')
+
+
 def settings(request):
     return render(request, "main/settings.html", {"settings":SettingsForm})
 
@@ -94,7 +100,7 @@ def sign_up(request):
 
 def scan_barcode(request):
     #added barcode form here
-    return render(request, "main/scan_barcode.html", {"barcode":BarcodeForm})
+    return render(request, "main/scan_barcode.html", {"barcode":BarcodeForm()})
 
 def researcher(request):
     return render(request, "main/researcher.html")
