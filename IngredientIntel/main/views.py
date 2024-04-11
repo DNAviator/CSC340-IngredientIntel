@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import SearchForm, SettingsForm, BarcodeForm
+from .forms import SearchForm, SettingsForm, BarcodeForm, ConsumerCreationForm
 from .models import *
 from django.db.models import F
 from django.apps import apps
@@ -78,7 +78,7 @@ def settings(request):
 
 def sign_up(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)  
+        form = ConsumerCreationForm(request.POST)  
         if form.is_valid():  
             form.save()
             newUser = User.objects.get(username=form.cleaned_data['username']) # Get the user object just created
@@ -89,7 +89,7 @@ def sign_up(request):
         else:
             messages.success(request, ("Error processing request, please try again")) # if an invalid form is passed in output error message
             return redirect('sign_up')
-    form = UserCreationForm()  # generate form to pass as context
+    form = ConsumerCreationForm()  # generate form to pass as context
     return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
 
 def scan_barcode(request):
