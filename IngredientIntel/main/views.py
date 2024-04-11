@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404
+from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
 from .forms import SearchForm, SettingsForm
 from .models import *
@@ -9,7 +9,8 @@ from django.views.generic import ListView
 from django.utils.http import urlencode
 from .bar_decoder import barcode_decoder
 from django.forms.models import model_to_dict
-
+from django.contrib.auth import authenticate, login, logout 
+from django.contrib import messages
 
 
 # Create your views here.
@@ -54,11 +55,23 @@ def results_page(request, type, id):
 
     return render(request, "main/results_page.html", context)
 
-def login(request):
+def login_page(request):
     """
     Runs the login page
     """
-    return render(request, "main/login.html")
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, (f"Successfully logged in as {username}"))
+            return redirect('home')
+        else:
+            messages.success(request, ("There was an error with your login, please try again"))
+            return redirect('login')
+    else:
+        return render(request, "main/login.html")
 
 def settings(request):
     return render(request, "main/settings.html", {"settings":SettingsForm})

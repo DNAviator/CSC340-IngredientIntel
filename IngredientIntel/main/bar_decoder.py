@@ -7,7 +7,7 @@ from django.conf import settings
 import os
 
 import cv2
-from pyzbar.pyzbar import decode
+# from pyzbar.pyzbar import decode
 
 #barcode = cv2.imread(static("images/peanuts.png"))
 def barcode_decoder() :

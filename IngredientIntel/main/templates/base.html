@@ -15,7 +15,15 @@
 <body>
 
     {% include 'nav.html' %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
+    {% endfor %}
+    {% endif %}
 
     {% block content %}{% endblock %}
 
@@ -25,8 +33,8 @@
         <p>
             Pages for institutions:
             <a href="{% url 'company' %}" align="right">Company</a> |
-            <a href="{% url 'researcher' %}" align="right">Researcher</a> | 
-            
+            <a href="{% url 'researcher' %}" align="right">Researcher</a> |
+
         </p>
 
     </footer>
