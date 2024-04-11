@@ -11,7 +11,8 @@ from .bar_decoder import barcode_decoder
 from django.forms.models import model_to_dict
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib import messages
-
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.forms import UserCreationForm
 
 
 # Create your views here.
@@ -47,12 +48,6 @@ def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
-    if request.method == "POST" : 
-        #form = 
-        print()
-
-
-
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
     info = get_object_or_404(model_obj, pk=id)
@@ -82,7 +77,20 @@ def settings(request):
     return render(request, "main/settings.html", {"settings":SettingsForm})
 
 def sign_up(request):
-    return render(request, "main/sign_up.html")
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)  
+        if form.is_valid():  
+            form.save()
+            newUser = User.objects.get(username=form.cleaned_data['username']) # Get the user object just created
+            consumer = Group.objects.get(name='consumer') # get the consumer group object
+            consumer.user_set.add(newUser)  # add the new user to the consumer group
+            messages.success(request, 'Account created successfully') # output successful login and redirect to the login
+            return redirect('login')
+        else:
+            messages.success(request, ("Error processing request, please try again")) # if an invalid form is passed in output error message
+            return redirect('sign_up')
+    form = UserCreationForm()  # generate form to pass as context
+    return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
 
 def scan_barcode(request):
     #added barcode form here
