@@ -112,6 +112,8 @@ class Product(models.Model):
         warnings (models.TextField): Any warnings associated with the product. This field is optional.
         notes (models.TextField): Additional notes or comments about the product from the producing company. This field is optional.
     """
+#will implement later
+    #def find_product(self)
 
     # # general search function
     # def search_db(self, query):
@@ -122,6 +124,7 @@ class Product(models.Model):
         
     #     return result
         # general search function
+
     def search_db(self, search_criteria, query):
         # ranks all results with Levenshtein distance function to query
         result = Product.objects.annotate(
@@ -136,7 +139,7 @@ class Product(models.Model):
     ingredients = models.ManyToManyField(Ingredient)
     warnings = models.TextField(blank=True)
     notes = models.TextField(blank=True)
-    #item_id = models.CharField(max_length=255)
+    item_id = models.TextField(blank=True)
 
     def __str__(self):
         """Return a human-readable representation of the product object."""

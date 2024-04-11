@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import SearchForm, SettingsForm
+from .forms import SearchForm, SettingsForm, BarcodeForm
 from .models import *
 from django.db.models import F
 from django.apps import apps
@@ -11,6 +11,7 @@ from .bar_decoder import barcode_decoder
 from django.forms.models import model_to_dict
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib import messages
+
 
 
 # Create your views here.
@@ -46,11 +47,15 @@ def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
+    if request.method == "POST" : 
+        #form = 
+        print()
+
+
 
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
     info = get_object_or_404(model_obj, pk=id)
-
     context = {"type": type, "info": model_to_dict(info)}
 
     return render(request, "main/results_page.html", context)
@@ -80,8 +85,8 @@ def sign_up(request):
     return render(request, "main/sign_up.html")
 
 def scan_barcode(request):
-    
-    return render(request, "main/scan_barcode.html")
+    #added barcode form here
+    return render(request, "main/scan_barcode.html", {"barcode":BarcodeForm})
 
 def researcher(request):
     return render(request, "main/researcher.html")
