@@ -1,6 +1,6 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import HttpResponse
-from .forms import SearchForm, SettingsForm, BarcodeForm, ConsumerCreationForm
+from .forms import SearchForm, SettingsForm, BarcodeForm
 from .models import *
 from django.db.models import F
 from django.apps import apps
@@ -49,30 +49,28 @@ def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
+    form = BarcodeForm(request.GET)
+
+    if request.method == "GET" : 
+        #form =
+         
+        print("HALLO EVERYONE!!")
+
+
+
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
     info = get_object_or_404(model_obj, pk=id)
+    
     context = {"type": type, "info": model_to_dict(info)}
 
     return render(request, "main/results_page.html", context)
 
-def login_page(request):
+def login(request):
     """
     Runs the login page
     """
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, (f"Successfully logged in as {username}"))
-            return redirect('home')
-        else:
-            messages.success(request, ("There was an error with your login, please try again"))
-            return redirect('login')
-    else:
-        return render(request, "main/login.html")
+    return render(request, "main/login.html")
 
 def logout_page(request):
     logout(request)
@@ -93,20 +91,7 @@ def settings(request):
     return render(request, "main/settings.html", {"settings":SettingsForm})
 
 def sign_up(request):
-    if request.method == "POST":
-        form = ConsumerCreationForm(request.POST)  
-        if form.is_valid():  
-            form.save()
-            newUser = User.objects.get(username=form.cleaned_data['username']) # Get the user object just created
-            consumer = Group.objects.get(name='consumer') # get the consumer group object
-            consumer.user_set.add(newUser)  # add the new user to the consumer group
-            messages.success(request, 'Account created successfully') # output successful login and redirect to the login
-            return redirect('login')
-        else:
-            messages.success(request, ("Error processing request, please try again")) # if an invalid form is passed in output error message
-            return redirect('sign_up')
-    form = ConsumerCreationForm()  # generate form to pass as context
-    return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
+    return render(request, "main/sign_up.html")
 
 def scan_barcode(request):
     #added barcode form here
