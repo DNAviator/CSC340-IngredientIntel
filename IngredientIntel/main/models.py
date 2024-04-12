@@ -91,7 +91,9 @@ class Company(models.Model):
 
         return result
 
-
+    class Meta:
+        verbose_name = "Company"
+        verbose_name_plural = "Companies"
 
     def __str__(self):
         """Return a human-readable representation of the company object."""
@@ -167,4 +169,7 @@ class SCINote(models.Model):
         """Return a human-readable representation of the SCINote object."""
         return f"Related ingredient: {self.ingredient}\nAuthors: {self.researcher_names}\nInstitutional Sponsor: {self.institution_name}\nNote: {self.notes_content}"
 
+    class Meta:
+        verbose_name = "Scientific Notes"
+        verbose_name_plural = "Scientific Notes"
     
