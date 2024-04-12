@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -78,8 +79,17 @@ def logout_page(request):
     messages.success(request, ("Logged Out"))
     return redirect('home')
 
-
+@login_required(redirect_field_name='login')
 def settings(request):
+    """
+    Returns the setting page if the user is authenticated as a consumer
+    """
+    if not request.user.is_authenticated:
+        messages.success(request, ("Login before accessing settings"))
+        return redirect('login')
+
+    # need to add functionality to view the current settings probably can show things easily
+    # but need to figure out how to pull up editable form
     return render(request, "main/settings.html", {"settings":SettingsForm})
 
 def sign_up(request):
@@ -102,9 +112,11 @@ def scan_barcode(request):
     #added barcode form here
     return render(request, "main/scan_barcode.html", {"barcode":BarcodeForm()})
 
+@login_required(redirect_field_name='researcher_login')
 def researcher(request):
     return render(request, "main/researcher.html")
 
+@login_required(redirect_field_name='company_login')
 def company(request):
     return render(request, "main/company.html")
 
