@@ -190,7 +190,7 @@ class ImageModel(models.Model):
     #img.name = "Barcode.jpg"
     #os.rename(img, "test.jpg")
 
-    #print("pookie ", img)
+
  
     def __str__(self):
         return self.title

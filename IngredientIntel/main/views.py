@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import SearchForm, SettingsForm, BarcodeForm
+from .forms import SearchForm, SettingsForm, BarcodeForm, ConsumerCreationForm
 from .models import *
 from django.db.models import F
 from django.apps import apps
@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect
 import os
 
 import cv2
-from pyzbar.pyzbar import decode
+# from pyzbar.pyzbar import decode
 
 
 
@@ -109,7 +109,21 @@ def settings(request):
     return render(request, "main/settings.html", {"settings":SettingsForm})
 
 def sign_up(request):
-    return render(request, "main/sign_up.html")
+    if request.method == "POST":
+        form = ConsumerCreationForm(request.POST)  
+        if form.is_valid():  
+            form.save()
+            newUser = User.objects.get(username=form.cleaned_data['username']) # Get the user object just created
+            consumer = Group.objects.get(name='consumer') # get the consumer group object
+            consumer.user_set.add(newUser)  # add the new user to the consumer group
+            messages.success(request, 'Account created successfully') # output successful login and redirect to the login
+            return redirect('login')
+        else:
+            messages.success(request, ("Error processing request, please try again")) # if an invalid form is passed in output error message
+            return redirect('sign_up')
+    form = ConsumerCreationForm()  # generate form to pass as context
+    return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
+
 
 def scan_barcode(request):      
     #context = {}
