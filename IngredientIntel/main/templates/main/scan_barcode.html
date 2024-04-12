@@ -5,10 +5,11 @@
 <div class="container mt-5">
     <h1>Scan Barcode</h1>
     <p>Upload an image containing the barcode you want to scan:</p>
-    <!-- used to go to search page, and was a post request -->
-    <form method="post" enctype="multipart/form-data" action="{% url 'result_page' %}">
+    <!-- used to go to search page, and was a post request. action="{ url 'result_page' model  }" -->
+    <form method="get" enctype="multipart/form-data" action="{% url 'result_page/Product/1' %}">{{ result.name }}
         {% csrf_token %}
-        <input type="image" name="barcode_image">
+        <input type="image" name="barcode">
+        <td>{{ barcode.query }}</td>
         <button type="submit" class="btn btn-primary">Scan Barcode</button>
     </form>
 </div>

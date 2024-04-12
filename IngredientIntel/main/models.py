@@ -113,7 +113,8 @@ class Product(models.Model):
         notes (models.TextField): Additional notes or comments about the product from the producing company. This field is optional.
     """
 #will implement later
-    #def find_product(self)
+    #def find_product(self, query) :
+
 
     # # general search function
     # def search_db(self, query):
