@@ -10,6 +10,13 @@ from django.utils.http import urlencode
 from .bar_decoder import barcode_decoder
 from django.forms.models import model_to_dict
 
+from django.conf import settings
+from django.http import HttpResponseRedirect
+import os
+
+import cv2
+from pyzbar.pyzbar import decode
+
 
 
 
@@ -82,8 +89,52 @@ def sign_up(request):
     return render(request, "main/sign_up.html")
 
 def scan_barcode(request):
+    #context = {}
+    #context['form'] = BarcodeForm()
+
     #added barcode form here
-    return render(request, "main/scan_barcode.html", {"barcode":BarcodeForm()})
+    #return render(request, "main/scan_barcode.html", context)
+
+    context = {}
+    if request.method == "POST":
+        form = BarcodeForm(request.POST, request.FILES)
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            img = form.cleaned_data.get("query")
+            
+            #img = "peepee.jpg"
+            #print("watatat ", img)
+            #print("Hiiiii", img.name)
+            obj = ImageModel.objects.create( title = name, img = img)
+            #print("Hiiiii", obj.img.name)
+            image_url = obj.img.path
+
+
+            barcode = cv2.imread(image_url)
+            decoded = decode(barcode)
+            upc = str(decoded[0].data)
+            upc = upc.replace("'", '')
+            upc = upc.replace("b", '')
+            print(upc)
+            
+            #upc =
+            #obj.img.name = 
+            #obj.img.name
+            #obj.save()
+            #print(obj)
+            return HttpResponseRedirect("/")
+
+            #image_url = ImageModel.objects.get(title= "HI")
+            #print("HAI!!!", image_url.img.name)
+
+            #image_dir = obj.objects.get()
+            #print()
+
+    else:
+        form = BarcodeForm()
+    context['form']= form
+    return render(request, "main/scan_barcode.html", context)
+
 
 def researcher(request):
     return render(request, "main/researcher.html")

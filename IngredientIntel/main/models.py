@@ -2,6 +2,9 @@ from django.db import models
 from django.db.models import Func, F
 from django.db.models.functions import Cast
 
+from django.conf import settings
+import os
+
 class Levenshtein(Func):
     """
     The levenshtien search function from the django.db.models Func
@@ -173,3 +176,21 @@ class SCINote(models.Model):
         verbose_name = "Scientific Notes"
         verbose_name_plural = "Scientific Notes"
     
+
+class ImageModel(models.Model):
+    title = models.CharField(max_length = 200)
+    img = models.ImageField(upload_to = "images/")
+    
+    
+
+    #ImageModel.objects.get(title="Barcode_test")
+    
+
+    #new_path = settings.MEDIA_ROOT + img
+    #img.name = "Barcode.jpg"
+    #os.rename(img, "test.jpg")
+
+    print("pookie ", img)
+ 
+    def __str__(self):
+        return self.title

@@ -3,6 +3,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+import cv2
+from pyzbar.pyzbar import decode
+
 class SearchForm(forms.Form):
     model = forms.ChoiceField(choices=[('Ingredient', 'Ingredient'), ('Product', 'Product'), ('Company', 'Company')], required=True, label="")
     query = forms.CharField(label="", required=True)
@@ -13,7 +16,9 @@ class SettingsForm(forms.Form):
     new_name = forms.CharField(required=False, label="Name Changer:")
 
 class BarcodeForm(forms.Form):
+    name = forms.CharField()
     query = forms.ImageField()
+    
 
 class ConsumerCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
