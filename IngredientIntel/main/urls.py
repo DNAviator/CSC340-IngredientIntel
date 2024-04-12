@@ -14,4 +14,6 @@ urlpatterns = [
     path("researcher/", views.researcher, name="researcher"),
     path("company/", views.company, name="company"),
     path("about/", views.about, name="about"),
+    path("login/", views.login_page, name="company_login"),
+    path("login/", views.login_page, name="researcher_login"),
 ]
