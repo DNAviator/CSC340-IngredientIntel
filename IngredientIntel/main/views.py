@@ -125,27 +125,22 @@ def scan_barcode(request):
             name = form.cleaned_data.get("name")
             img = form.cleaned_data.get("query")
             
-            #img = "peepee.jpg"
-            #print("watatat ", img)
-            #print("Hiiiii", img.name)
             obj = ImageModel.objects.create( title = name, img = img)
-            #print("Hiiiii", obj.img.name)
+           
             image_url = obj.img.path
 
-
+            
             barcode = cv2.imread(image_url)
             decoded = decode(barcode)
             upc = str(decoded[0].data)
             upc = upc.replace("'", '')
             upc = upc.replace("b", '')
             print(upc)
+            item = Product.objects.get(item_id=upc)
             
-            #upc =
-            #obj.img.name = 
-            #obj.img.name
-            #obj.save()
-            #print(obj)
-            return HttpResponseRedirect("/")
+            return redirect('result_page', "Product", item.id)
+            
+            return redirect("home")
 
             #image_url = ImageModel.objects.get(title= "HI")
             #print("HAI!!!", image_url.img.name)
