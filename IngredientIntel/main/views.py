@@ -61,11 +61,8 @@ def results_page(request, type, id):
     form = BarcodeForm(request.GET)
 
     if request.method == "GET" : 
-        #form =
-         
+        #form =        
         print("HALLO EVERYONE!!")
-
-
 
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
@@ -75,11 +72,23 @@ def results_page(request, type, id):
 
     return render(request, "main/results_page.html", context)
 
-def login(request):
+def login_page(request):
     """
     Runs the login page
     """
-    return render(request, "main/login.html")
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, (f"Successfully logged in as {username}"))
+            return redirect('home')
+        else:
+            messages.success(request, ("There was an error with your login, please try again"))
+            return redirect('login')
+    else:
+        return render(request, "main/login.html")
 
 def logout_page(request):
     logout(request)
@@ -102,7 +111,7 @@ def settings(request):
 def sign_up(request):
     return render(request, "main/sign_up.html")
 
-def scan_barcode(request):
+def scan_barcode(request):      
     #context = {}
     #context['form'] = BarcodeForm()
 
