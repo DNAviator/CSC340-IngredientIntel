@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect
 import os
 
 import cv2
-# from pyzbar.pyzbar import decode
+from pyzbar.pyzbar import decode
 
 
 
@@ -58,11 +58,6 @@ def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
-    form = BarcodeForm(request.GET)
-
-    if request.method == "GET" : 
-        #form =        
-        print("HALLO EVERYONE!!")
 
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
@@ -126,41 +121,30 @@ def sign_up(request):
 
 
 def scan_barcode(request):      
-    #context = {}
-    #context['form'] = BarcodeForm()
-
-    #added barcode form here
-    #return render(request, "main/scan_barcode.html", context)
-
     context = {}
     if request.method == "POST":
         form = BarcodeForm(request.POST, request.FILES)
-        if form.is_valid():
-            name = form.cleaned_data.get("name")
-            img = form.cleaned_data.get("query")
+        if form.is_valid(): 
+            img = form.cleaned_data.get("image") # Stores image from form 
             
-            obj = ImageModel.objects.create( title = name, img = img)
+            
+            obj = ImageModel.objects.create(img = img) # Creates an image model with an image as input
            
-            image_url = obj.img.path
+            image_url = obj.img.path # stores directory of the image
 
-            
+
             barcode = cv2.imread(image_url)
-            decoded = decode(barcode)
+
+            os.unlink(image_url) # Removes image from media/images
+
+            decoded = decode(barcode) # Decodes barcode from a user's image
             upc = str(decoded[0].data)
-            upc = upc.replace("'", '')
-            upc = upc.replace("b", '')
-            print(upc)
-            item = Product.objects.get(item_id=upc)
-            
-            return redirect('result_page', "Product", item.id)
-            
-            return redirect("home")
+            upc = upc[2:-1] # Removes unwanted formatting on upc number
+            item = Product.objects.get(item_id=upc) # Scans DB for a product with the same upc as the one in a user's image
 
-            #image_url = ImageModel.objects.get(title= "HI")
-            #print("HAI!!!", image_url.img.name)
-
-            #image_dir = obj.objects.get()
-            #print()
+            
+            
+            return redirect('result_page', "Product", item.id) # Sends users to correct item
 
     else:
         form = BarcodeForm()

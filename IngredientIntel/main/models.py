@@ -178,19 +178,13 @@ class SCINote(models.Model):
     
 
 class ImageModel(models.Model):
-    title = models.CharField(max_length = 200)
+    """
+    Model for intaking images
+
+    Attributes:
+        img(model.ImageField): Image taken from user
+    """
     img = models.ImageField(upload_to = "images/")
-    
-    
 
-    #ImageModel.objects.get(title="Barcode_test")
-    
-
-    #new_path = settings.MEDIA_ROOT + img
-    #img.name = "Barcode.jpg"
-    #os.rename(img, "test.jpg")
-
-
- 
     def __str__(self):
         return self.title

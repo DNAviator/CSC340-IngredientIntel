@@ -16,8 +16,9 @@ class SettingsForm(forms.Form):
     new_name = forms.CharField(required=False, label="Name Changer:")
 
 class BarcodeForm(forms.Form):
-    name = forms.CharField()
-    query = forms.ImageField()
+    #name = forms.CharField(widget=forms.TextInput(attrs={'class':'centerform'}))
+    image = forms.ImageField(widget=forms.FileInput(attrs={'class':'centerform'}))
+    image.help_text = None
     
 
 class ConsumerCreationForm(UserCreationForm):
