@@ -64,8 +64,19 @@ def results_page(request, type, id):
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
     info = get_object_or_404(model_obj, pk=id)
-    
-    context = {"type": type, "info": model_to_dict(info)}
+    info = model_to_dict(info)
+
+    for key in info : # This for loop looks for unwanted formatting from the ManytoMany Field type and makes it look nicer to a user
+        content = str(info[key])
+        if content[0] == "[" :
+            content = content[1:-1]
+            content = content.replace(">", "")
+            content = content.replace("<Ingredient: ", "")
+            content = content.replace("<Product: ", "")
+
+            info[key] = content
+
+    context = {"type": type, "info": info}
 
     return render(request, "main/results_page.html", context)
 
@@ -140,7 +151,7 @@ def scan_barcode(request):
             os.unlink(image_url) # Removes image from media/images
 
             decoded = decode(barcode) # Decodes barcode from a user's image
-            if len(decoded) == 0:
+            if len(decoded) == 0: #If barcode has nothing it points to, redirect to scan_barcode
                 return redirect('scan_barcode')
             if str(decoded[0].type) == "QRCODE":
                 return redirect('scan_barcode')
