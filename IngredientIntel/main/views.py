@@ -15,6 +15,8 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from django.conf import settings
 from django.http import HttpResponseRedirect
 import os
@@ -138,10 +140,17 @@ def scan_barcode(request):
             os.unlink(image_url) # Removes image from media/images
 
             decoded = decode(barcode) # Decodes barcode from a user's image
+            if len(decoded) == 0:
+                return redirect('scan_barcode')
+            if str(decoded[0].type) == "QRCODE":
+                return redirect('scan_barcode')
             upc = str(decoded[0].data)
             upc = upc[2:-1] # Removes unwanted formatting on upc number
-            item = Product.objects.get(item_id=upc) # Scans DB for a product with the same upc as the one in a user's image
-
+            
+            try:
+                item = Product.objects.get(item_id=upc) # Scans DB for a product with the same upc as the one in a user's image
+            except ObjectDoesNotExist :
+                return redirect('scan_barcode')
             
             
             return redirect('result_page', "Product", item.id) # Sends users to correct item
