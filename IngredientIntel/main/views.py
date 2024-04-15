@@ -66,8 +66,12 @@ def results_page(request, type, id):
     info = get_object_or_404(model_obj, pk=id)
     info = model_to_dict(info)
 
+    del info["id"]
+
     for key in info : # This for loop looks for unwanted formatting from the ManytoMany Field type and makes it look nicer to a user
         content = str(info[key])
+
+
         if content[0] == "[" :
             content = content[1:-1]
             content = content.replace(">", "")
@@ -75,6 +79,8 @@ def results_page(request, type, id):
             content = content.replace("<Product: ", "")
 
             info[key] = content
+
+        
 
     context = {"type": type, "info": info}
 
