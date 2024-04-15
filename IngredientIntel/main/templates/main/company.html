@@ -18,6 +18,12 @@
 
     <p>You can create your products here:</p>
 
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+
     <form method="post" action="{% url 'company' %}">
         {% csrf_token %}
         <label for="ingredient">Product Name:</label>

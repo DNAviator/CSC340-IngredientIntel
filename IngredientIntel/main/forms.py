@@ -19,6 +19,13 @@ class BarcodeForm(forms.Form):
     #name = forms.CharField(widget=forms.TextInput(attrs={'class':'centerform'}))
     image = forms.ImageField(widget=forms.FileInput(attrs={'class':'centerform'}))
     image.help_text = None
+
+class NewProductForm(forms.Form) :
+    product_name = forms.CharField(required=True)
+    ingredients = forms.CharField(required=False)
+    warnings = forms.CharField(required=False)
+
+
     
 
 class ConsumerCreationForm(UserCreationForm):

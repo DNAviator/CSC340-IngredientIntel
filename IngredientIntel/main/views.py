@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import SearchForm, SettingsForm, BarcodeForm, ConsumerCreationForm
+from .forms import SearchForm, SettingsForm, BarcodeForm, ConsumerCreationForm, NewProductForm
 from .models import *
 from django.db.models import F
 from django.apps import apps
@@ -184,7 +184,23 @@ def researcher(request):
 
 @login_required(redirect_field_name='company_login')
 def company(request):
-    return render(request, "main/company.html")
+    context = {}
+    if request.method == "POST" :
+        form = NewProductForm(request.POST, request.FILES)
+        if form.is_valid(): 
+            name = form.cleaned_data.get("product_name")
+            print(name)
+            company = Company.objects.get(name = "Planters")
+            print(company)
+            obj = Product.objects.create(name = name, producing_company= company, warnings = "So Cute.", notes = "handsome even", item_id = "1234567891" )
+
+            return redirect('company')
+    else :
+        form = NewProductForm()
+    #item = Product.objects.create()
+
+    context['form'] = form
+    return render(request, "main/company.html", context)
 
 def about(request):
     return render(request, "main/about.html")
