@@ -3,7 +3,6 @@ from django.urls import path
 from . import views
 
 
-
 urlpatterns = [
     path("", views.index, name="home"),
     path("search/", views.search_page, name="search_page"),
@@ -14,9 +13,10 @@ urlpatterns = [
     path("scan_barcode/", views.scan_barcode, name="scan_barcode"),
     path("logout/", views.logout_page, name="logout"),
     path("researcher/", views.researcher, name="researcher"),
-    path("company/", views.company, name="company"),
+    path("company/<str:company>/", views.company, name="company"),
     path("about/", views.about, name="about"),
-    path("login/", views.login_page, name="company_login"),
+    path("company_login/", views.login_page, name="company_login"),
+    path("create_company/", views.create_company, name="create_company"),
     path("login/", views.login_page, name="researcher_login"),
     path('ingredient-autocomplete/', views.IngredientAutocomplete.as_view(), name='ingredient-autocomplete'),
 ]

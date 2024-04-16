@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Func, F
 from django.db.models.functions import Cast
+from django.contrib.auth.models import User
 
 from django.conf import settings
 import os
@@ -68,15 +69,19 @@ class Company(models.Model):
     of additional textual notes.
 
     Attributes:
-        name (models.CharField): The unique name of the company.
-        products (models.ManyToManyField): A many-to-many relationship with the Product model, representing the products produced by the company. This field is optional.
-        date_founded (models.DateField): The date when the company was founded.
-        notes (models.TextField): Additional textual notes about the company. This field is optional.
+        name (CharField): The unique name of the company.
+        products (ManyToManyField): Represents the products produced by the company. This field is optional.
+        date_founded (DateField): The date when the company was founded.
+        notes (TextField): Additional textual notes about the company. This field is optional.
+        registered_users (ManyToManyField): Represents the users who are allowed to access the company dashboard
     """
     name = models.CharField(max_length=255, unique=True)
     products = models.ManyToManyField('Product', related_name='products', blank=True)
     date_founded = models.DateField()
     notes = models.TextField(blank=True)
+    registered_users = models.ManyToManyField(User, related_name='registered_users', blank=False)
+    company_registration_number = models.CharField(max_length=9, unique=True)
+    company_address = models.TextField(blank=False)
 
     # general search function
     # def search_db(self, query):

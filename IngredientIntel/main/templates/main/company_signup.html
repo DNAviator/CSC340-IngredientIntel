@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'signup.css' %}">
+{% endblock %}
+{% block title %}Create a Company{% endblock %}
+
+{% block content %}
+
+<form action="{% url 'create_company' %}" method="post">
+    {% csrf_token %}
+    <div class="container" align="center">
+        <h1>Sign Up for Ingredient Intel</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" name="submit" value="Create Company" />
+        </form>
+    </div>
+</form>
+
+{% endblock %}
