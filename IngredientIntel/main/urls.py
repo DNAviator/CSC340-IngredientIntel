@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+
+
 urlpatterns = [
     path("", views.index, name="home"),
     path("search/", views.search_page, name="search_page"),
@@ -16,4 +18,5 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("login/", views.login_page, name="company_login"),
     path("login/", views.login_page, name="researcher_login"),
+    path('ingredient-autocomplete/', views.IngredientAutocomplete.as_view(), name='ingredient-autocomplete'),
 ]

@@ -2,9 +2,11 @@ from typing import Any
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from .models import *
 import cv2
 from pyzbar.pyzbar import decode
+from dal import autocomplete
+
 
 class SearchForm(forms.Form):
     model = forms.ChoiceField(choices=[('Ingredient', 'Ingredient'), ('Product', 'Product'), ('Company', 'Company')], required=True, label="")
@@ -20,13 +22,18 @@ class BarcodeForm(forms.Form):
     image = forms.ImageField(widget=forms.FileInput(attrs={'class':'centerform'}))
     image.help_text = None
 
-class NewProductForm(forms.Form) :
-    product_name = forms.CharField(required=True)
-    ingredients = forms.CharField(required=False)
-    warnings = forms.CharField(required=False)
+class NewProductForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['producing_company'].initial = Company.objects.get(name="Test") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
 
-
-    
+    class Meta:
+        model = Product
+        fields = ('__all__')
+        widgets = {
+            'ingredients': autocomplete.ModelSelect2Multiple(url='ingredient-autocomplete'),
+            'producing_company': forms.HiddenInput()
+        }
 
 class ConsumerCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
@@ -70,3 +77,4 @@ class CompanyCreationForm(UserCreationForm):
         super(CompanyCreationForm, self).__init__(*args, **kwargs)
         for fieldname in ['password1', 'password2']:
             self.fields[fieldname].help_text = None
+

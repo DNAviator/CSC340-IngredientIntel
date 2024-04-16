@@ -5,40 +5,87 @@
 {% block content %}
 <style>
     .banner {
-        background-color: rgb(0, 140, 255);
+        background-color: rgba(67, 170, 255, 0.603);
         color: white;
-        padding: 20px;
+        padding: 10px;
         margin-bottom: 20px;
+        text-align: center;
     }
 </style>
 <div class="banner">
-    <h1>Welcome, Google!</h1>
+    <h1>{{ user.username }} Dashboard</h1>
 </div>
+<br>
 <div class="container">
-
-    <p>You can create your products here:</p>
-
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
+    <form class="row mb-3 align-items-start">
+        <div class="col-8">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for Specific Products..."
+                    aria-label="Recipient's username with two button addons">
+                <button class="btn btn-outline-secondary" type="button">Search</button>
+            </div>
+        </div>
     </form>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card h-100 overflow-auto">
+                <div class="card-header">
+                    Current Products
+                </div>
+                <table class="table table-hover table-borderless">
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td><a href="">Update</a> | <a href="">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    Create New Product
+                </div>
+                <div class="card-body">
 
-    <form method="post" action="{% url 'company' %}">
-        {% csrf_token %}
-        <label for="ingredient">Product Name:</label>
-        <input type="text" id="ingredient" name="ingredient" required><br><br>
-
-        <label for="ingredients">Ingredients:</label>
-        <input type="file" id="ingredients" name="ingredients" required><br><br>
-
-        <label for="warnings">Warnings:</label>
-        <input type="text" id="warnings" name="warnings"><br><br>
-
-        <label for="content">Note Content:</label><br>
-        <textarea id="content" name="content" rows="5" required></textarea><br><br>
-
-        <button type="submit">Create Product</button>
-    </form>
+                    <form method="POST" >
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="Create Product">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<!-- Black magic that allows the select multiple to work nicely -->
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ form.media }}
+
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>
 {% endblock %}

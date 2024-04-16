@@ -14,18 +14,31 @@ from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-
 from django.core.exceptions import ObjectDoesNotExist
-
 from django.conf import settings
 from django.http import HttpResponseRedirect
 import os
-
 import cv2
 from pyzbar.pyzbar import decode
+from dal import autocomplete
 
 
 
+class IngredientAutocomplete(autocomplete.Select2QuerySetView):
+    """
+    Helper view that allows for an autocomplete select for the ingredients for product creation
+    """
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Ingredient.objects.none()
+
+        qs = Ingredient.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
 
 # Create your views here.
 def index(request):
@@ -184,23 +197,21 @@ def researcher(request):
 
 @login_required(redirect_field_name='company_login')
 def company(request):
-    context = {}
-    if request.method == "POST" :
-        form = NewProductForm(request.POST, request.FILES)
+    company_object=Company.objects.get(name="Test")
+
+    if request.method == "POST":
+        form = NewProductForm(request.POST) # this is a hack needs to be fixed
         if form.is_valid(): 
-            name = form.cleaned_data.get("product_name")
-            print(name)
-            company = Company.objects.get(name = "Planters")
-            print(company)
-            obj = Product.objects.create(name = name, producing_company= company, warnings = "So Cute.", notes = "handsome even", item_id = "1234567891" )
-
+            form.save()
+            messages.success(request, ("Product Successfuly Created"))
             return redirect('company')
-    else :
-        form = NewProductForm()
-    #item = Product.objects.create()
-
-    context['form'] = form
-    return render(request, "main/company.html", context)
+        else:
+            messages.success(request, ("Error Creating Product"))
+            return redirect('company')
+    form = NewProductForm() # this needs to be fixed
+    company = request.user
+    products = Product.objects.filter(producing_company=company_object) # get all the products this user has created
+    return render(request, "main/company.html", {'form':form, 'products':products})
 
 def about(request):
     return render(request, "main/about.html")
