@@ -22,6 +22,14 @@ class BarcodeForm(forms.Form):
     image = forms.ImageField(widget=forms.FileInput(attrs={'class':'centerform'}))
     image.help_text = None
 
+class NewCompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('__all__')
+        widgets = { 
+            'products':forms.HiddenInput()  
+        }
+
 class NewProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -50,31 +58,5 @@ class ConsumerCreationForm(UserCreationForm):
         self.fields['password2'].widget.attrs['class'] = 'centerform'
 
         for fieldname in ['username', 'password1', 'password2']:
-            self.fields[fieldname].help_text = None
-
-
-class CompanyCreationForm(UserCreationForm):
-    """
-    *** Not Completed ***
-    Form used to create Companies
-    Takes:
-        Buisness Registration Number (9 digits)
-        Registered Buisness Address
-        Primary Buisness Contact:
-            First_name
-            Last_name
-            Email
-        Company_Name
-    """
-    email = forms.EmailField()
-    company_registration_number = forms.CharField(max_length=9)
-    
-    class Meta:
-        model = User
-        fields = ('password1', 'password2')
-    
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super(CompanyCreationForm, self).__init__(*args, **kwargs)
-        for fieldname in ['password1', 'password2']:
             self.fields[fieldname].help_text = None
 

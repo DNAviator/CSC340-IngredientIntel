@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import SearchForm, SettingsForm, BarcodeForm, ConsumerCreationForm, NewProductForm
+from .forms import *
 from .models import *
 from django.db.models import F
 from django.apps import apps
@@ -60,7 +60,7 @@ def search_page(request):
         search_results = model_obj.search_db(model_obj, "name", search_query)
 
         # create paginator to manage the multiple pages of results
-        paginator = Paginator(search_results, 2)                    # paginator class from django show 2 results of the model output
+        paginator = Paginator(search_results, 25)                    # paginator class from django show 2 results of the model output
         page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
         page_obj = paginator.get_page(page_number)                  # paginator returns the page data
 
@@ -196,22 +196,28 @@ def researcher(request):
     return render(request, "main/researcher.html")
 
 @login_required(redirect_field_name='company_login')
-def company(request):
-    company_object=Company.objects.get(name="Test")
-
-    if request.method == "POST":
-        form = NewProductForm(request.POST) # this is a hack needs to be fixed
-        if form.is_valid(): 
-            form.save()
-            messages.success(request, ("Product Successfuly Created"))
-            return redirect('company')
-        else:
-            messages.success(request, ("Error Creating Product"))
-            return redirect('company')
-    form = NewProductForm() # this needs to be fixed
-    company = request.user
-    products = Product.objects.filter(producing_company=company_object) # get all the products this user has created
-    return render(request, "main/company.html", {'form':form, 'products':products})
+def company(request, company):
+    company_object=Company.objects.get(name=company)
+    print(company_object.registered_users)
+    if company_object.registered_users.filter(pk=request.user.pk).exists():
+        if request.method == "POST":
+            form = NewProductForm(request.POST) # this is a hack needs to be fixed
+            if form.is_valid(): 
+                form.save()
+                messages.success(request, ("Product Successfuly Created"))
+                return redirect('company')
+            else:
+                messages.success(request, ("Error Creating Product"))
+                return redirect('company')
+        form = NewProductForm() # this needs to be fixed
+        products = Product.objects.filter(producing_company=company_object) # get all the products this user has created
+        return render(request, "main/company.html", {'form':form, 'products':products})
+    else:
+        messages.success(request, ('Please log into a user account registered to this company...'))
+        return redirect('login')
 
 def about(request):
     return render(request, "main/about.html")
+
+def create_company(request):
+    return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
