@@ -68,5 +68,10 @@ class ConsumerCreationForm(UserCreationForm):
 
 class CompanySelectionForm(forms.ModelForm):
     print()
-    
+    #companies = autocomplete.ModelSelect2Multiple(url='ingredient-autocomplete'),
+    #for items in Company.objects :
+        #Company.registered_users.
+    companies = forms.ChoiceField()
+
+
 

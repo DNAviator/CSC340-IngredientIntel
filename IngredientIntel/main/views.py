@@ -39,6 +39,7 @@ class IngredientAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(name__istartswith=self.q)
 
         return qs
+    
 
 # Create your views here.
 def index(request):
@@ -247,4 +248,23 @@ def create_company(request):
     return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
 
 def select_company(request):
+
+    print()
+    companies = Company.objects.all()
+    user_perms = {}
+    
+    
+    for items in Company.objects.all() :
+        items = model_to_dict(items)
+        people = items["registered_users"]
+        for item in people:
+            print(request.user)
+            if(request.user == str(item)) :
+                user_perms = items["name"]
+                print(items)
+            #print(str(item))
+        #print(people)
+
+
+
     return render(request, "main/company_select.html")
