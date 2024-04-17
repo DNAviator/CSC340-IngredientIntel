@@ -38,7 +38,8 @@ class NewCompanyForm(forms.ModelForm):
 class NewProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['producing_company'].initial = Company.objects.get(name="Test") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
+
+        self.fields['producing_company'].initial = Company.objects.get(name="Planters") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
 
     class Meta:
         model = Product

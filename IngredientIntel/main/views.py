@@ -216,10 +216,12 @@ def company(request, company):
     if company_object.registered_users.filter(pk=request.user.pk).exists():
         if request.method == "POST":
             form = NewProductForm(request.POST) # this is a hack needs to be fixed
-            if form.is_valid(): 
+            if form.is_valid():
+                company_name = form.cleaned_data.get('producing_company') 
                 form.save()
                 messages.success(request, ("Product Successfuly Created"))
-                return redirect('company')
+
+                return redirect('./')
             else:
                 messages.success(request, ("Error Creating Product"))
                 return redirect('company')
