@@ -9,7 +9,7 @@ from dal import autocomplete
 
 
 class SearchForm(forms.Form):
-    model = forms.ChoiceField(choices=[('Ingredient', 'Ingredient'), ('Product', 'Product'), ('Company', 'Company')], required=True, label="")
+    model = forms.ChoiceField(choices=[('Product', 'Product'), ('Ingredient', 'Ingredient'), ('Company', 'Company')], required=True, label="")
     query = forms.CharField(label="", required=True)
 
 class SettingsForm(forms.Form):
@@ -27,7 +27,12 @@ class NewCompanyForm(forms.ModelForm):
         model = Company
         fields = ('__all__')
         widgets = { 
-            'products':forms.HiddenInput()  
+            'products': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={'class':'centerform'}),
+            'date_founded': forms.DateInput(attrs={'class':'centerform'}),
+            'notes': forms.TextInput(attrs={'class':'centerform'}),
+            'company_registration_number': forms.TextInput(attrs={'class':'centerform'}),
+            'company_address': forms.TextInput(attrs={'class':'centerform'}),
         }
 
 class NewProductForm(forms.ModelForm):

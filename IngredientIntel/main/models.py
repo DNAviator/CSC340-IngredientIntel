@@ -84,13 +84,6 @@ class Company(models.Model):
     company_address = models.TextField(blank=False)
 
     # general search function
-    # def search_db(self, query):
-    #     # ranks all results with Levenshtein distance function to query
-    #     result = Company.objects.annotate(
-    #         rank=Cast(Levenshtein(Company.name, query), output_field=models.IntegerField())
-    #     ).order_by('rank')
-    #     return result
-    # general search function
     def search_db(self, search_criteria, query):
         # ranks all results with Levenshtein distance function to query
         result = Company.objects.annotate(
