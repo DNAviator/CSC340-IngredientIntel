@@ -257,11 +257,14 @@ def select_company(request):
     for items in Company.objects.all() :
         items = model_to_dict(items)
         people = items["registered_users"]
+        current = items["name"]
+        print(current)
+
         for item in people:
             print(request.user)
             if(request.user == str(item)) :
-                user_perms = items["name"]
-                print(items)
+                user_perms = current
+                print(current)
             #print(str(item))
         #print(people)
 
