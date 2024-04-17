@@ -217,11 +217,11 @@ def company(request, company):
         if request.method == "POST":
             form = NewProductForm(request.POST) # this is a hack needs to be fixed
             if form.is_valid():
-                company_name = form.cleaned_data.get('producing_company') 
+                #company_name = form.cleaned_data.get('producing_company') 
                 form.save()
                 messages.success(request, ("Product Successfuly Created"))
 
-                return redirect('./')
+                return redirect('./') #keeps user at same directory
             else:
                 messages.success(request, ("Error Creating Product"))
                 return redirect('company')
@@ -236,4 +236,10 @@ def about(request):
     return render(request, "main/about.html")
 
 def create_company(request):
+    if request.method == "POST":
+        form = NewCompanyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("./")
+
     return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
