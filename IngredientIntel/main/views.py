@@ -80,6 +80,8 @@ def results_page(request, type, id):
     info = model_to_dict(info)
 
     del info["id"]
+    if "registered_users" in info.keys():
+        del info["registered_users"]
 
     # for key in info : # This for loop looks for unwanted formatting from the ManytoMany Field type and makes it look nicer to a user
     #     info[key] = str(info[key])
@@ -89,6 +91,13 @@ def results_page(request, type, id):
         info["ingredients"] = ""
         for item in ingredient_list:
             info["ingredients"] += str(item) + ", "
+    
+    if "products" in info.keys():
+        product_list = info["products"]
+        info["products"] = ""
+        for item in product_list:
+            info["products"] += str(item) + ", "
+
             
         # if content[0] == "[" :
         #     content = content[1:-1]
