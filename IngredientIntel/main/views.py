@@ -81,14 +81,15 @@ def results_page(request, type, id):
 
     del info["id"]
 
-    for key in info : # This for loop looks for unwanted formatting from the ManytoMany Field type and makes it look nicer to a user
-        info[key] = str(info[key])
+    # for key in info : # This for loop looks for unwanted formatting from the ManytoMany Field type and makes it look nicer to a user
+    #     info[key] = str(info[key])
 
     if "ingredients" in info.keys():
         ingredient_list = info["ingredients"]
         info["ingredients"] = ""
         for item in ingredient_list:
-            info["ingredients"] += str(item)
+            info["ingredients"] += str(item) + ", "
+            
         # if content[0] == "[" :
         #     content = content[1:-1]
         #     content = content.replace(">", "")
