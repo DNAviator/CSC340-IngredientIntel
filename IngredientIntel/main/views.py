@@ -245,3 +245,6 @@ def create_company(request):
             return redirect("./")
 
     return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
+
+def select_company(request):
+    return render(request, "main/company_select.html")
