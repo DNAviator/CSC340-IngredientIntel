@@ -241,5 +241,7 @@ def create_company(request):
         if form.is_valid():
             form.save()
             return redirect("./")
+        else:
+            return redirect("./")
 
     return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
