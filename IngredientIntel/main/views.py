@@ -248,26 +248,8 @@ def create_company(request):
     return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
 
 def select_company(request):
+    # Get the current user and then do a reverse match on the related name of the registered user field of the company model
+    current_user = request.user
+    valid_companies = current_user.registered_users.all()
 
-    print()
-    companies = Company.objects.all()
-    user_perms = {}
-    
-    
-    for items in Company.objects.all() :
-        items = model_to_dict(items)
-        people = items["registered_users"]
-        current = items["name"]
-        print(current)
-
-        for item in people:
-            print(request.user)
-            if(request.user == str(item)) :
-                user_perms = current
-                print(current)
-            #print(str(item))
-        #print(people)
-
-
-
-    return render(request, "main/company_select.html")
+    return render(request, "main/company_select.html", {"valid_companies": valid_companies})
