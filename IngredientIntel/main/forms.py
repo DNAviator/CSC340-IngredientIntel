@@ -29,17 +29,22 @@ class NewCompanyForm(forms.ModelForm):
         widgets = { 
             'products': forms.HiddenInput(),
             'name': forms.TextInput(attrs={'class':'centerform'}),
-            'date_founded': forms.DateInput(attrs={'class':'centerform'}),
+            'date_founded': forms.DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control', 
+                        'placeholder': 'Select a date',
+                        'type': 'date'
+              }),
             'notes': forms.TextInput(attrs={'class':'centerform'}),
             'company_registration_number': forms.TextInput(attrs={'class':'centerform'}),
             'company_address': forms.TextInput(attrs={'class':'centerform'}),
         }
 
 class NewProductForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
 
-        self.fields['producing_company'].initial = Company.objects.get(name="Planters") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
+    #     self.fields['producing_company'].initial = Company.objects.get(name="Planters") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
 
     class Meta:
         model = Product

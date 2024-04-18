@@ -217,8 +217,9 @@ def company(request, company):
     if company_object.registered_users.filter(pk=request.user.pk).exists():
         if request.method == "POST":
             form = NewProductForm(request.POST) # this is a hack needs to be fixed
+            form.fields['producing_company'] =  company_object
             if form.is_valid():
-                #company_name = form.cleaned_data.get('producing_company') 
+               
                 form.save()
                 messages.success(request, ("Product Successfuly Created"))
 
@@ -241,15 +242,20 @@ def create_company(request):
         form = NewCompanyForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("./")
+            messages.success(request, ("Company Created Successfully"))
+            return redirect('company', request.POST['name'])
         else:
-            return redirect("./")
+            messages.success(request, ("Error with company creation please try again..."))
+            return redirect('create_company')
 
     return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
 
 def select_company(request):
     # Get the current user and then do a reverse match on the related name of the registered user field of the company model
+    if not request.user.is_authenticated:
+        messages.success(request, ("Please Login First"))
+        return redirect('login')
+
     current_user = request.user
     valid_companies = current_user.registered_users.all()
-
     return render(request, "main/company_select.html", {"valid_companies": valid_companies})
