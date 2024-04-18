@@ -1,0 +1,35 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <img class="navbar-brand" src="{% static 'images/INRAM_logo.png' %}" width="50" height="50" alt="InRam Logo">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <a class="nav-link" href="{% url 'home' %}">Home</a>
+        <a class="nav-link" href="{% url 'about' %}">About</a>
+      </ul>
+
+      <form class="search-container" action="{% url 'search_page' %}" method="get">
+        {{ search_form }}
+        <button class="nav-link" type="submit">Search</button>
+      </form>
+
+      <!-- <form class="search-container" method="post" action="{% url 'search_page' %}">
+          {% csrf_token %}
+          {{ search_form }}
+          <button class="nav-link" type="submit">Search</button>
+        </form> -->
+      {% if user.is_authenticated %}
+      <a href="{% url 'logout' %}" class="nav-link ms-2">Logout</a>
+      <a class="nav-link ms-2" aria-current="page" href="{% url 'settings' %}">Settings</a>
+      {% else %}
+      <a href="{% url 'login' %}" class="nav-link ms-2">Login</a>
+      {% endif %}
+
+    </div>
+  </div>
+</nav>

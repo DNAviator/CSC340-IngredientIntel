@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Scan Barcode{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Scan Barcode</h1>
+    <p>Upload an image containing the barcode you want to scan:</p>
+    <!-- used to go to search page, and was a post request. action="{ url 'result_page' model  }" -->
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+
+</div>
+{% endblock %}

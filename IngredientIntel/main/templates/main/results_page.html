@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Results Page{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  
+  <table class="table">
+    {% for key, item in info.items %}
+    <tbody class="table-light">
+      <tr>
+        <th>{{key}}: {{ item }}</th>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+ 
+
+</div>
+
+{% endblock %}
