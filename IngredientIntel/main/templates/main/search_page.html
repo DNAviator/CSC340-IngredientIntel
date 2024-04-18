@@ -1,20 +1,50 @@
 {% extends 'base.html' %}
 {% block title %}Search{% endblock %}
 
+
 {% block content %}
-  <div class="container mt-5">
-    <h1>{{type}} Search Results</h1>
-    {% if result_names %}
 
-      {% for result in result_names %}
-    <div class="search-results">
-      <a href="{% url 'result_page' type 1 %}">{{ result }}</a>
-      <div class="additional-info">placeholder text</div>
-    </div>
-      {% endfor %}
+{% if page_obj %}
 
-    {% else %}
-      <div class="search-results">No Results found</div>
-    {% endif %}
-  </div>
+
+{% for result in page_obj %}
+<div class="search-results">
+    <a href="{% url 'result_page' model result.id %}">{{ result.name }}</a>
+</div>
+
+{% endfor %}
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?{{ params }}&page=1">First</a></li>
+        <li class="page-item"><a class="page-link"
+                href="?{{ params }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">First</span>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+        </li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?{{ params }}&page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?{{ params }}&page={{ page_obj.paginator.num_pages }}">Last
+            </a></li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">Last</span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% else %}
+<p>No Results</p>
+{% endif %}
 {% endblock %}

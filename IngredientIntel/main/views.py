@@ -1,6 +1,45 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import SearchForm, SettingsForm
+from .forms import *
+from .models import *
+from django.db.models import F
+from django.apps import apps
+from django.core.paginator import Paginator
+from django.views.generic import ListView
+from django.utils.http import urlencode
+from .bar_decoder import barcode_decoder
+from django.forms.models import model_to_dict
+from django.contrib.auth import authenticate, login, logout 
+from django.contrib import messages
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
+from django.http import HttpResponseRedirect
+import os
+import cv2
+from pyzbar.pyzbar import decode
+from dal import autocomplete
+
+
+
+class IngredientAutocomplete(autocomplete.Select2QuerySetView):
+    """
+    Helper view that allows for an autocomplete select for the ingredients for product creation
+    """
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Ingredient.objects.none()
+
+        qs = Ingredient.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
+    
 
 # Create your views here.
 def index(request):
@@ -9,55 +48,201 @@ def index(request):
     """
     return render(request, "main/index.html")
 
-def search_page(request):
-    """
-    returns the page of search results
-    """
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            search_criteria = form.cleaned_data['search_criteria']
-            search_query = form.cleaned_data['search_query']
 
-            # Process search logic based on criteria and query
-            context = {"result_names":["sugar", "aspertame", "stevia"], "type":search_criteria, "query":search_query, "no_results": False}
-            return render(request, "main/search_page.html", context)
-    # if there is an invalid input returns the no results page
-    return render(request, "main/search_page.html", {"no_results": True})
+def search_page(request):
+
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        # get model results based off get params
+        search_model = request.GET.get('model')                  # gets from the url the model specified
+        search_query = request.GET.get('query')                     # gets from the url the search query
+
+        model_obj = apps.get_model('main', search_model)
+        search_results = model_obj.search_db(model_obj, "name", search_query)
+
+        # create paginator to manage the multiple pages of results
+        paginator = Paginator(search_results, 25)                    # paginator class from django show 2 results of the model output
+        page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
+        page_obj = paginator.get_page(page_number)                  # paginator returns the page data
+
+        # render page (added params to keep search paramaters through the different pages.
+        return render(request, "main/search_page.html", {"page_obj": page_obj, "model": search_model, "params":urlencode({"model":search_model, "query":search_query})})
+    else:
+        return render(request, "main/search_page.html")
 
 def results_page(request, type, id):
     """
     returns the page describing the item, company, or product
     """
-    #hardcoded info
-    info = {
-        "name":"Sugar",
-        "purpose":"To sweeten product",
-        "warnings":"May cause hyperglycemia and increase heart rate",
-        "notes":"Research articles: [link1, link2, link3]",
-        "num_products":100000,
-    }
+
+    #Get the model from the type, get the exact item or return 404    
+    model_obj = apps.get_model('main', type)
+    info = get_object_or_404(model_obj, pk=id)
+    info = model_to_dict(info)
+
+    del info["id"]
+    if "registered_users" in info.keys(): # Delete dangerous field if it exists
+        del info["registered_users"]
+
+    if "ingredients" in info.keys():
+        ingredient_list = info["ingredients"]
+        info["ingredients"] = ""
+        for item in ingredient_list:
+            info["ingredients"] += str(item) + ", "
+    
+    if "products" in info.keys():
+        product_list = info["products"]
+        info["products"] = ""
+        for item in product_list:
+            info["products"] += str(item) + ", "
+
     context = {"type": type, "info": info}
 
     return render(request, "main/results_page.html", context)
 
-def login(request):
+
+@login_required(redirect_field_name='login')
+def settings(request):
+    """
+    Returns the setting page if the user is authenticated as a consumer
+    """
+    if not request.user.is_authenticated:
+        messages.success(request, ("Login before accessing settings"))
+        return redirect('login')
+
+    # need to add functionality to view the current settings probably can show things easily
+    # but need to figure out how to pull up editable form
+    return render(request, "main/settings.html", {"settings":SettingsForm})
+
+
+def login_page(request):
     """
     Runs the login page
     """
-    return render(request, "main/login.html")
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, (f"Successfully logged in as {username}"))
+            return redirect('home')
+        else:
+            messages.success(request, ("There was an error with your login, please try again"))
+            return redirect('login')
+    else:
+        return render(request, "main/login.html")
 
-def settings(request):
-    return render(request, "main/settings.html", {"settings":SettingsForm})
+def logout_page(request):
+    logout(request)
+    messages.success(request, ("Logged Out"))
+    return redirect('home')
 
 def sign_up(request):
-    return render(request, "main/sign_up.html")
+    if request.method == "POST":
+        form = ConsumerCreationForm(request.POST)  
+        if form.is_valid():  
+            form.save()
+            newUser = User.objects.get(username=form.cleaned_data['username']) # Get the user object just created
+            consumer = Group.objects.get(name='consumer') # get the consumer group object
+            consumer.user_set.add(newUser)  # add the new user to the consumer group
+            messages.success(request, 'Account created successfully') # output successful login and redirect to the login
+            return redirect('login')
+        else:
+            messages.success(request, ("Error processing request, please try again")) # if an invalid form is passed in output error message
+            return redirect('sign_up')
+    form = ConsumerCreationForm()  # generate form to pass as context
+    return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
 
-def scan_barcode(request):
-    return render(request, "main/scan_barcode.html")
+def scan_barcode(request):      
+    context = {}
+    if request.method == "POST":
+        form = BarcodeForm(request.POST, request.FILES)
+        if form.is_valid(): 
+            img = form.cleaned_data.get("image") # Stores image from form 
+            
+            
+            obj = ImageModel.objects.create(img = img) # Creates an image model with an image as input
+           
+            image_url = obj.img.path # stores directory of the image
+
+            barcode = cv2.imread(image_url)
+
+            os.unlink(image_url) # Removes image from media/images
+
+            decoded = decode(barcode) # Decodes barcode from a user's image
+            if len(decoded) == 0: #If barcode has nothing it points to, redirect to scan_barcode
+                return redirect('scan_barcode')
+            if str(decoded[0].type) == "QRCODE":
+                return redirect('scan_barcode')
+            upc = str(decoded[0].data)
+            upc = upc[2:-1] # Removes unwanted formatting on upc number
+            
+            try:
+                item = Product.objects.get(item_id=upc) # Scans DB for a product with the same upc as the one in a user's image
+            except ObjectDoesNotExist :
+                return redirect('scan_barcode')
+            
+            
+            return redirect('result_page', "Product", item.id) # Sends users to correct item
+
+    else:
+        form = BarcodeForm()
+    context['form']= form
+    return render(request, "main/scan_barcode.html", context)
+
+
+@login_required(redirect_field_name='researcher_login')
 def researcher(request):
     return render(request, "main/researcher.html")
 
-def company(request):
-    
-    return render(request, "main/company.html")
+@login_required(redirect_field_name='company_login')
+def company(request, company):
+    company_object=Company.objects.get(name=company)
+    print(company_object.registered_users)
+    if company_object.registered_users.filter(pk=request.user.pk).exists():
+        if request.method == "POST":
+            form = NewProductForm(request.POST) # this is a hack needs to be fixed
+            form.fields['producing_company'] =  company_object
+            
+            if form.is_valid():
+               
+                form.save()
+                messages.success(request, ("Product Successfuly Created"))
+
+                return redirect('./') #keeps user at same directory
+            else:
+                messages.success(request, ("Error Creating Product"))
+                return redirect('./')
+        form = NewProductForm() # this needs to be fixed
+        products = Product.objects.filter(producing_company=company_object) # get all the products this user has created
+        return render(request, "main/company.html", {'form':form, 'products':products})
+    else:
+        messages.success(request, ('Please log into a user account registered to this company...'))
+        return redirect('login')
+
+def about(request):
+    return render(request, "main/about.html")
+
+def create_company(request):
+    if request.method == "POST":
+        form = NewCompanyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, ("Company Created Successfully"))
+            return redirect('company', request.POST['name'])
+        else:
+            messages.success(request, ("Error with company creation please try again..."))
+            return redirect('./')
+
+    return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
+
+def select_company(request):
+    # Get the current user and then do a reverse match on the related name of the registered user field of the company model
+    if not request.user.is_authenticated:
+        messages.success(request, ("Please Login First"))
+        return redirect('login')
+
+    current_user = request.user
+    valid_companies = current_user.registered_users.all()
+    return render(request, "main/company_select.html", {"valid_companies": valid_companies})

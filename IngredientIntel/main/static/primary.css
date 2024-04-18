@@ -81,3 +81,15 @@ body {
   /* Adjust height as desired */
 }
 
+.search-results {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-results:last-child {
+  margin-bottom: 0;
+}
+
+

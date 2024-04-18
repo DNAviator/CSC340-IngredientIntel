@@ -1,0 +1,56 @@
+<diagram program="umletino" version="15.1"><zoom_level>3</zoom_level><element><id>UMLClass</id><coordinates><x>384</x><y>357</y><w>75</w><h>51</h></coordinates><panel_attributes>Ingredients
+--
+-id: Long
+-name: Char(max=255, unique=True)
+-warnings: .txt(blank=True)
+-notes: SCINote(blank=True)
+--
+#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>384</x><y>255</y><w>75</w><h>57</h></coordinates><panel_attributes>Company
+--
+-id: Long
+-name: string
+-products: Product
+-date founded: Date
+-notes: .txt(blank=True)
+--
+#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>603</x><y>141</y><w>72</w><h>57</h></coordinates><panel_attributes>User
+--
+-id: Long
+-username: Char (max=255)
+-password: PasswordForm
+-last login: Date
+-first name: char(max=255)
+-last name: char(max=255)
+-email: EmailForm
+-date joined: Date
+--
+Has_Permission(Permission): Boolean
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>285</x><y>255</y><w>75</w><h>57</h></coordinates><panel_attributes>Products
+--
+-id: Long
+-Name: Char (255 max)
+-Producing company: Company
+-Ingredients: Ingredient
+-warnings: .txt(blank=True)
+-notes: .txt(blank=True)
+--
+#Operation(query: string): &lt;QuerySet&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>477</x><y>255</y><w>75</w><h>57</h></coordinates><panel_attributes>SCINotes
+--
+-id: Long
+-Researcher names: .txt
+-Institution name: .txt(blank=True)
+-Content: .txt
+-Citations: .txt(blank=True)
+-Ingredient: Ingredient</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>264</x><y>276</y><w>126</w><h>93</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>400;290;10;290;10;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>357</x><y>258</y><w>33</w><h>21</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;50;10;50;50;90;50</additional_attributes></element><element><id>Relation</id><coordinates><x>456</x><y>285</y><w>27</w><h>102</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;320;40;320;40;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>357</x><y>270</y><w>33</w><h>9</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>603</x><y>204</y><w>63</w><h>33</h></coordinates><panel_attributes>Groups
+--
+-id: Long
+-name: char(max=255)
+-permissions: Permissions
+-users: Users
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>603</x><y>267</y><w>63</w><h>33</h></coordinates><panel_attributes>Permissions
+--
+-id: Long
+-name: char(max=255)
+-validators: .JSON
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>579</x><y>144</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>80;10;10;10;10;280;80;280</additional_attributes></element><element><id>Relation</id><coordinates><x>663</x><y>219</y><w>27</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;180;70;180;70;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>549</x><y>258</y><w>60</w><h>33</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;100;10;100;90;180;90</additional_attributes></element><element><id>Relation</id><coordinates><x>456</x><y>246</y><w>153</w><h>45</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;50;50;50;50;10;410;10;410;130;490;130</additional_attributes></element><element><id>Relation</id><coordinates><x>357</x><y>234</y><w>252</w><h>57</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;90;50;90;50;10;740;10;740;170;820;170</additional_attributes></element></diagram>

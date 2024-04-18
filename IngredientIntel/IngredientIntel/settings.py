@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 with open(os.path.join(BASE_DIR.parent, 'secrets.json')) as secrets_file:
     secrets = json.load(secrets_file)
 
+
 def get_secret(setting, secrets=secrets):
     """Get secret setting or fail with ImproperlyConfigured"""
     try:
@@ -50,6 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cleanup.apps.CleanupConfig',
+    'dal',
+    'dal_select2',
 ]
 
 MIDDLEWARE = [
@@ -88,23 +92,16 @@ WSGI_APPLICATION = 'IngredientIntel.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# Not actual database used for test server
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase'
+DATABASES = { 
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": get_secret("DB_PSWD"),
+        "HOST": get_secret("DB_HOST"),
+        "PORT": "5432",
     }
 }
-# DATABASES = { #not configured
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "IngredientIntel",
-#         "USER": "django-app",
-#         "PASSWORD": get_secret("DB_PSWD"),
-#         "HOST": "localhost",
-#         "PORT": "2204",
-#     }
-# }
 
 
 # Password validation
@@ -142,6 +139,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#Images (static/images/)
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

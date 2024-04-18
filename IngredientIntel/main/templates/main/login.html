@@ -6,7 +6,7 @@
 {%block title%}Login{%endblock%}
 
 {% block content%}
-<form method="post" action="{% url 'home' %}">
+<form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <div class="container">
         <h1 align="center">User Login</h1>
