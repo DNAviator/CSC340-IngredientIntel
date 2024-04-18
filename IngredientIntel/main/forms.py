@@ -41,10 +41,11 @@ class NewCompanyForm(forms.ModelForm):
         }
 
 class NewProductForm(forms.ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        parent_company = kwargs.pop('producing_company')
+        super().__init__(*args, **kwargs)
 
-    #     self.fields['producing_company'].initial = Company.objects.get(name="Planters") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
+        self.fields['producing_company'].initial = parent_company #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
 
     class Meta:
         model = Product
@@ -55,6 +56,8 @@ class NewProductForm(forms.ModelForm):
         }
 
 class ConsumerCreationForm(UserCreationForm):
+    error_css_class = 'error'
+    required_css_class = 'required'
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
     last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
 
@@ -68,8 +71,8 @@ class ConsumerCreationForm(UserCreationForm):
         self.fields['password1'].widget.attrs['class'] = 'centerform'
         self.fields['password2'].widget.attrs['class'] = 'centerform'
 
-        for fieldname in ['username', 'password1', 'password2']:
-            self.fields[fieldname].help_text = None
+        # for fieldname in ['username', 'password1', 'password2']:
+        #     self.fields[fieldname].help_text = None
 
 class CompanySelectionForm(forms.ModelForm):
     print()

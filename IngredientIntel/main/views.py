@@ -216,8 +216,8 @@ def company(request, company):
     print(company_object.registered_users)
     if company_object.registered_users.filter(pk=request.user.pk).exists():
         if request.method == "POST":
-            form = NewProductForm(request.POST) # this is a hack needs to be fixed
-            form.fields['producing_company'] =  company_object
+            form = NewProductForm(request.POST, producing_company=company_object) # this is a hack needs to be fixed
+            # form.fields['producing_company'].initial =  company_object.id
             if form.is_valid():
                
                 form.save()
@@ -225,9 +225,11 @@ def company(request, company):
 
                 return redirect('./') #keeps user at same directory
             else:
+                for item in form:
+                    print(str(item))
                 messages.success(request, ("Error Creating Product"))
-                return redirect('company')
-        form = NewProductForm() # this needs to be fixed
+                return redirect('./')
+        form = NewProductForm(producing_company=company_object) # this needs to be fixed
         products = Product.objects.filter(producing_company=company_object) # get all the products this user has created
         return render(request, "main/company.html", {'form':form, 'products':products})
     else:
