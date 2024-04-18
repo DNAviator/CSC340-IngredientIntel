@@ -7,17 +7,12 @@
 
 {% block content %}
 
-<form action="{% url 'company_select' %}" method="post">
-    {% csrf_token %}
-    <div class="container" align="center">
-        <h1>Select your company!</h1>
-
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" name="submit" value="Create Company" />
-        </form>
+<div class="container">
+    <div class="d-grid gap-4">
+        {% for company_object in valid_companies %}
+        <a class="btn btn-primary" type="button" href="{% url 'company' company_object.name %}">
+            {{ company_object.name }}</a>
+        {% endfor %}
     </div>
-</form>
-
+</div>
 {% endblock %}
