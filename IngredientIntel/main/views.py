@@ -219,6 +219,7 @@ def company(request, company):
         messages.success(request, ('Please log into a user account registered to this company...'))
         return redirect('login')
 
+
 def about(request):
     return render(request, "main/about.html")
 
