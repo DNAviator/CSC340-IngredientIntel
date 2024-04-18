@@ -8,7 +8,7 @@
 <div class="container mt-5">
     <div class="list-group text-center">
         <li class="list-group-item active" aria-current="true">
-                <h5 class="display-5">Search Results</h5>
+            <h5 class="display-5">Search Results</h5>
         </li>
         {% for result in page_obj %}
         <a class="list-group-item list-group-item-action" href="{% url 'result_page' model result.id %}">
@@ -16,13 +16,13 @@
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1 fw-bold">{{ result.name }}</h5>
             </div>
-            
+
             {% if model == "Ingredient" %}
             <p class="mb-1 text-start"> {{ result.purpose }}</p>
             {% else %}
             <p class="mb-1 text-start"> {{ result.notes }}</p>
             {% endif %}
-            
+
             {% if result.ingredients in user_settings.flag_ingredients %}
             <span class="badge bg-primary rounded-pill">Contains Flagged Ingredient</span>
             {% endif %}
@@ -30,40 +30,40 @@
         </a>
         {% endfor %}
     </div>
-    <br>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?{{ params }}&page=1">First</a></li>
-            <li class="page-item"><a class="page-link"
-                    href="?{{ params }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">First</span>
-            </li>
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-            {% endif %}
+</div>
+<br>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?{{ params }}&page=1">First</a></li>
+        <li class="page-item"><a class="page-link"
+                href="?{{ params }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">First</span>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+        </li>
+        {% endif %}
 
-            {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link"
-                    href="?{{ params }}&page={{ page_obj.next_page_number }}">Next</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="?{{ params }}&page={{ page_obj.paginator.num_pages }}">Last
-                </a></li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-            <li class="page-item disabled">
-                <span class="page-link">Last</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% else %}
-    <p>No Results</p>
-    {% endif %}
-    <br>
-    {% endblock %}
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?{{ params }}&page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?{{ params }}&page={{ page_obj.paginator.num_pages }}">Last
+            </a></li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Next</span>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Last</span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% else %}
+<p>No Results</p>
+{% endif %}
+<br>
+{% endblock %}
