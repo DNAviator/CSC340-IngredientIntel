@@ -2,3 +2,14 @@
 *.pyc
 /__pycache__/
 IngredientIntel/main/__pycache__/views.cpython-312.pyc
+IngredientIntel/IngredientIntel/__pycache__/__init__.cpython-312.pyc
+IngredientIntel/IngredientIntel/__pycache__/settings.cpython-312.pyc
+IngredientIntel/main/__pycache__/urls.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0001_initial.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0002_alter_company_products_remove_ingredient_notes_and_more.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0003_product_item_id.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0004_remove_product_item_id.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0005_product_item_id.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0006_imagemodel_alter_company_options_and_more.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0007_remove_imagemodel_title.cpython-312.pyc
+IngredientIntel/main/migrations/__pycache__/0008_company_company_address_and_more.cpython-312.pyc
