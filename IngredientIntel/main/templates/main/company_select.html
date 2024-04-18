@@ -3,14 +3,14 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{% static 'signup.css' %}">
 {% endblock %}
-{% block title %}Create a Company{% endblock %}
+{% block title %}Select a Company{% endblock %}
 
 {% block content %}
 
-<form action="{% url 'create_company' %}" method="post">
+<form action="{% url 'company_select' %}" method="post">
     {% csrf_token %}
     <div class="container" align="center">
-        <h1>Register your company!</h1>
+        <h1>Select your company!</h1>
 
         <form method="POST">
             {% csrf_token %}

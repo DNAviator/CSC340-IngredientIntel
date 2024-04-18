@@ -19,4 +19,5 @@ urlpatterns = [
     path("create_company/", views.create_company, name="create_company"),
     path("login/", views.login_page, name="researcher_login"),
     path('ingredient-autocomplete/', views.IngredientAutocomplete.as_view(), name='ingredient-autocomplete'),
+    path("company_select/", views.select_company, name="company_select")
 ]

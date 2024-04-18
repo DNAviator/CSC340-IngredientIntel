@@ -38,7 +38,8 @@ class NewCompanyForm(forms.ModelForm):
 class NewProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['producing_company'].initial = Company.objects.get(name="Test") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
+
+        self.fields['producing_company'].initial = Company.objects.get(name="Planters") #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
 
     class Meta:
         model = Product
@@ -64,4 +65,13 @@ class ConsumerCreationForm(UserCreationForm):
 
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
+
+class CompanySelectionForm(forms.ModelForm):
+    print()
+    #companies = autocomplete.ModelSelect2Multiple(url='ingredient-autocomplete'),
+    #for items in Company.objects :
+        #Company.registered_users.
+    companies = forms.ChoiceField()
+
+
 

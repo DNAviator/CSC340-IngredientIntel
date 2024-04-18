@@ -39,6 +39,7 @@ class IngredientAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(name__istartswith=self.q)
 
         return qs
+    
 
 # Create your views here.
 def index(request):
@@ -80,6 +81,8 @@ def results_page(request, type, id):
     info = model_to_dict(info)
 
     del info["id"]
+    if "registered_users" in info.keys():
+        del info["registered_users"]
 
     # for key in info : # This for loop looks for unwanted formatting from the ManytoMany Field type and makes it look nicer to a user
     #     info[key] = str(info[key])
@@ -89,6 +92,13 @@ def results_page(request, type, id):
         info["ingredients"] = ""
         for item in ingredient_list:
             info["ingredients"] += str(item) + ", "
+    
+    if "products" in info.keys():
+        product_list = info["products"]
+        info["products"] = ""
+        for item in product_list:
+            info["products"] += str(item) + ", "
+
             
         # if content[0] == "[" :
         #     content = content[1:-1]
@@ -207,10 +217,12 @@ def company(request, company):
     if company_object.registered_users.filter(pk=request.user.pk).exists():
         if request.method == "POST":
             form = NewProductForm(request.POST) # this is a hack needs to be fixed
-            if form.is_valid(): 
+            if form.is_valid():
+                #company_name = form.cleaned_data.get('producing_company') 
                 form.save()
                 messages.success(request, ("Product Successfuly Created"))
-                return redirect('company')
+
+                return redirect('./') #keeps user at same directory
             else:
                 messages.success(request, ("Error Creating Product"))
                 return redirect('company')
@@ -225,4 +237,37 @@ def about(request):
     return render(request, "main/about.html")
 
 def create_company(request):
+    if request.method == "POST":
+        form = NewCompanyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("./")
+        else:
+            return redirect("./")
+
     return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
+
+def select_company(request):
+
+    print()
+    companies = Company.objects.all()
+    user_perms = {}
+    
+    
+    for items in Company.objects.all() :
+        items = model_to_dict(items)
+        people = items["registered_users"]
+        current = items["name"]
+        print(current)
+
+        for item in people:
+            print(request.user)
+            if(request.user == str(item)) :
+                user_perms = current
+                print(current)
+            #print(str(item))
+        #print(people)
+
+
+
+    return render(request, "main/company_select.html")
