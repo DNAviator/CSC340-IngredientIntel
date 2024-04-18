@@ -162,16 +162,16 @@ def sign_up(request):
 
     if request.method == "POST":
         form = ConsumerCreationForm(request.POST)  
-        if form.is_valid():  
-            form.save()
+        if form.is_valid():                                                    # Check form is filled out properly
+            form.save()                                                        # Add new user to database
             newUser = User.objects.get(username=form.cleaned_data['username']) # Get the user object just created
-            consumer = Group.objects.get(name='consumer') # get the consumer group object
-            consumer.user_set.add(newUser)  # add the new user to the consumer group
-            messages.success(request, 'Account created successfully') # output successful login and redirect to the login
+            consumer = Group.objects.get(name='consumer')                      # get the consumer group object
+            consumer.user_set.add(newUser)                                     # add the new user to the consumer group
+            messages.success(request, 'Account created successfully')          # output successful login and redirect to the login
             return redirect('login')
         else:
             messages.success(request, ("Error processing request, please try again")) # if an invalid form is passed in output error message
-            return redirect('sign_up')
+            return render(request, "main/sign_up.html", {"form":form})
     form = ConsumerCreationForm()  # generate form to pass as context
     return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
 

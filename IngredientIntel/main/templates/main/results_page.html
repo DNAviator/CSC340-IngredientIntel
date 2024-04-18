@@ -3,18 +3,19 @@
 
 {% block content %}
 <div class="container mt-5">
-  
-  <table class="table">
+
+  <table class="table table-hover">
     {% for key, item in info.items %}
-    <tbody class="table-light">
+    <tbody class="table">
       <tr>
-        <th>{{key}}: {{ item }}</th>
+        <td>{{ key }}</td>
+        <td>{{ item }}</td>
       </tr>
     </tbody>
     {% endfor %}
   </table>
 
- 
+
 
 </div>
 

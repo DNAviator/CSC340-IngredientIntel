@@ -56,7 +56,7 @@ class NewProductForm(forms.ModelForm):
         }
 
 class ConsumerCreationForm(UserCreationForm):
-    # error_css_class = 'invalid-tooltip'
+    # error_css_class = 'alert alert-danger'
     # required_css_class = 'invalid-tooltip'
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
     last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
@@ -71,7 +71,7 @@ class ConsumerCreationForm(UserCreationForm):
         self.fields['password1'].widget.attrs['class'] = 'centerform'
         self.fields['password2'].widget.attrs['class'] = 'centerform'
 
-        for fieldname in ['username', 'password2']:
+        for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
 
 class CompanySelectionForm(forms.ModelForm):

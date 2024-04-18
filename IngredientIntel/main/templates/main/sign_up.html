@@ -11,66 +11,31 @@
     <form action="{% url 'sign_up' %}" method="post">
 
         {% csrf_token %}
-        {{ form.as_p }}
+        <label class="form-label">First Name</label>
+        {{ form.first_name }}
+        <label for="exampleFormControlInput1" class="form-label">Last Name</label>
+        {{ form.last_name }}
+        <label for="exampleFormControlInput1" class="form-label">Username</label>
+        {{ form.username }}
+        <!-- <label for="exampleFormControlInput1" class="form-label">Email address</label>
+        {{ form.email }} -->
+        <label for="exampleFormControlInput1" class="form-label">Password</label>
+        {{ form.password1 }}
+        <label for="exampleFormControlInput1" class="form-label">Confirm Password</label>
+        {{ form.password2 }}
+
+        {% for field, error in form.errors.items %}
+        {% for individual_error in error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ individual_error|striptags }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endfor %}
         <input type="submit" name="submit" value="Sign Up" />
     </form>
 
 </div>
-
-
-<!-- <script>
-    // Add a variable to track focused element
-    let focusedElement;
-
-    // Update showTooltip function to consider focus state
-    function showTooltip(element) {
-        if (element === focusedElement) {
-            return; // Don't show tooltip if element is already focused
-        }
-        focusedElement = element; // Update focused element
-
-        const tooltip = element.nextElementSibling;
-        if (tooltip && tooltip.classList.contains('tooltip')) {
-            // Check for error class before showing tooltip
-            if (element.classList.contains('error')) {
-                tooltip.classList.add('show');
-            } else {
-                tooltip.classList.remove('show');
-            }
-        }
-    }
-
-    // Event listeners (update blur event logic)
-    const tooltipFields = document.querySelectorAll('.has-tooltip');
-    tooltipFields.forEach(field => {
-        field.addEventListener('focus', () => showTooltip(field));
-        field.addEventListener('blur', () => showTooltip(field));
-    });
-
-</script>
-
-<style>
-    /* Style your tooltip here */
-    .tooltip {
-        display: none;
-        position: absolute;
-        background-color: black;
-        color: white;
-        padding: 5px;
-        border-radius: 3px;
-        font-size: 12px;
-        /* Add more styles as needed */
-    }
-
-    .tooltip.show {
-        display: block;
-    }
-
-    /* Add styling for .has-tooltip class if needed */
-    .has-tooltip {
-        position: relative;
-    }
-</style> -->
 
 
 </body>
