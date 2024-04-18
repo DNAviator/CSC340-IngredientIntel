@@ -215,18 +215,15 @@ def company(request, company):
     company_object=Company.objects.get(name=company)
     print(company_object.registered_users)
     if company_object.registered_users.filter(pk=request.user.pk).exists():
-        if request.method == "POST":
-            form = NewProductForm(request.POST, producing_company=company_object) # this is a hack needs to be fixed
-            # form.fields['producing_company'].initial =  company_object.id
-            if form.is_valid():
-               
-                form.save()
-                messages.success(request, ("Product Successfuly Created"))
 
+        if request.method == "POST":
+            form = NewProductForm(request.POST, producing_company=company_object) # initializes form with post request and foreign key
+
+            if form.is_valid():
+                form.save() # Adds product to the database
+                messages.success(request, ("Product Successfuly Created")) # output sucess message
                 return redirect('./') #keeps user at same directory
             else:
-                for item in form:
-                    print(str(item))
                 messages.success(request, ("Error Creating Product"))
                 return redirect('./')
         form = NewProductForm(producing_company=company_object) # this needs to be fixed
