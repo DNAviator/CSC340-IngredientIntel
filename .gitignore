@@ -14,5 +14,5 @@ IngredientIntel/main/migrations/__pycache__/0006_imagemodel_alter_company_option
 IngredientIntel/main/migrations/__pycache__/0007_remove_imagemodel_title.cpython-312.pyc
 IngredientIntel/main/migrations/__pycache__/0008_company_company_address_and_more.cpython-312.pyc
 IngredientIntel/main/__pycache__/context_processors.cpython-312.pyc
-IngredientIntel\main\migrations\__pycache__\*
-IngredientIntel\main\__pycache__\*
+IngredientIntel/main\migrations/__pycache__/*
+IngredientIntel/main/__pycache__/*

@@ -81,11 +81,8 @@ def results_page(request, type, id):
     info = model_to_dict(info)
 
     del info["id"]
-    if "registered_users" in info.keys():
+    if "registered_users" in info.keys(): # Delete dangerous field if it exists
         del info["registered_users"]
-
-    # for key in info : # This for loop looks for unwanted formatting from the ManytoMany Field type and makes it look nicer to a user
-    #     info[key] = str(info[key])
 
     if "ingredients" in info.keys():
         ingredient_list = info["ingredients"]
@@ -99,20 +96,24 @@ def results_page(request, type, id):
         for item in product_list:
             info["products"] += str(item) + ", "
 
-            
-        # if content[0] == "[" :
-        #     content = content[1:-1]
-        #     content = content.replace(">", "")
-        #     content = content.replace("<Ingredient: ", "")
-        #     content = content.replace("<Product: ", "")
-
-        #     info[key] = content
-
-        
-
     context = {"type": type, "info": info}
 
     return render(request, "main/results_page.html", context)
+
+
+@login_required(redirect_field_name='login')
+def settings(request):
+    """
+    Returns the setting page if the user is authenticated as a consumer
+    """
+    if not request.user.is_authenticated:
+        messages.success(request, ("Login before accessing settings"))
+        return redirect('login')
+
+    # need to add functionality to view the current settings probably can show things easily
+    # but need to figure out how to pull up editable form
+    return render(request, "main/settings.html", {"settings":SettingsForm})
+
 
 def login_page(request):
     """
@@ -137,19 +138,6 @@ def logout_page(request):
     messages.success(request, ("Logged Out"))
     return redirect('home')
 
-@login_required(redirect_field_name='login')
-def settings(request):
-    """
-    Returns the setting page if the user is authenticated as a consumer
-    """
-    if not request.user.is_authenticated:
-        messages.success(request, ("Login before accessing settings"))
-        return redirect('login')
-
-    # need to add functionality to view the current settings probably can show things easily
-    # but need to figure out how to pull up editable form
-    return render(request, "main/settings.html", {"settings":SettingsForm})
-
 def sign_up(request):
     if request.method == "POST":
         form = ConsumerCreationForm(request.POST)  
@@ -166,7 +154,6 @@ def sign_up(request):
     form = ConsumerCreationForm()  # generate form to pass as context
     return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
 
-
 def scan_barcode(request):      
     context = {}
     if request.method == "POST":
@@ -178,7 +165,6 @@ def scan_barcode(request):
             obj = ImageModel.objects.create(img = img) # Creates an image model with an image as input
            
             image_url = obj.img.path # stores directory of the image
-
 
             barcode = cv2.imread(image_url)
 
