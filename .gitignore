@@ -1,2 +1,4 @@
 /secrets.json
 *.pyc
+/__pycache__/
+IngredientIntel/main/__pycache__/views.cpython-312.pyc
