@@ -117,16 +117,21 @@ def settings(request):
 
 def login_page(request):
     """
-    Runs the login page
+    login_page(request):
+        POST:
+            gets username and password from post request and tries to log the user in outputting a message depending on the result
+            and redirecting to login if it fails, home otherwise
+        GET:
+            returns the login page html where a user can enter their information to log in
     """
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        username = request.POST['username'] # get username from post
+        password = request.POST['password'] # get password from post
+        user = authenticate(request, username=username, password=password) # django auth attempt
         if user is not None:
-            login(request, user)
-            messages.success(request, (f"Successfully logged in as {username}"))
-            return redirect('home')
+            login(request, user) # actually log user in
+            messages.success(request, (f"Successfully logged in as {username}")) # send success message to html
+            return redirect('home') # redirect home
         else:
             messages.success(request, ("There was an error with your login, please try again"))
             return redirect('login')
@@ -134,11 +139,27 @@ def login_page(request):
         return render(request, "main/login.html")
 
 def logout_page(request):
+    """
+    logout_page(request): logs out the user contained in the request if they exist and redirects to home (does not have a corresponding view)
+    """
     logout(request)
     messages.success(request, ("Logged Out"))
     return redirect('home')
 
 def sign_up(request):
+    """
+    sign_up(request):
+        Redirects to home if the user is already logged in
+        POST:
+            Checks that the post request contains the information for a user and if so creates the user and redirects to login
+            If there is an error in this process redirects back to signup and displays an error message
+        GET:
+            Returns the html for the sign_up page with the user creation form passed as context allowing users to enter information for their account
+    """
+    if request.user.is_authenticated:
+        messages.success(request, ("You are already logged in!"))
+        return redirect('home')
+
     if request.method == "POST":
         form = ConsumerCreationForm(request.POST)  
         if form.is_valid():  
@@ -192,11 +213,11 @@ def scan_barcode(request):
     return render(request, "main/scan_barcode.html", context)
 
 
-@login_required(redirect_field_name='researcher_login')
+@login_required(redirect_field_name='login')
 def researcher(request):
     return render(request, "main/researcher.html")
 
-@login_required(redirect_field_name='company_login')
+@login_required(redirect_field_name='login')
 def company(request, company):
     company_object=Company.objects.get(name=company)
     print(company_object.registered_users)
@@ -219,6 +240,18 @@ def company(request, company):
         messages.success(request, ('Please log into a user account registered to this company...'))
         return redirect('login')
 
+@login_required(redirect_field_name='login')
+def update_product(request, product_object):
+    """
+    Not configured yet, designed to allow for the update of products, should redirect to the company page after submission sending the post request to be dealt with there
+    """
+    if product_object in Product.objects.all():
+        if product_object.producing_company.registered_users.filter(pk=request.user.pk).exists(): # check the user is allowed to do this
+            form = NewProductForm(product_object) # create filled in form to pass to view
+            return render(request, "", {'form':form}) # need to create a view for this
+    
+    messages.success(request, ("There was a critical error with your request"))
+    return redirect('home')
 
 def about(request):
     return render(request, "main/about.html")

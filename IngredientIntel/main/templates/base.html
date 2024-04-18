@@ -27,17 +27,17 @@
 
     {% block content %}{% endblock %}
 
-    <div class="container mt-auto">
-        <footer class="py-3 my-4">
-            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-                <li class="nav-item"><span class="nav-link disabled px-2 text-muted">Pages for institutions:</span></li>
-                <li class="nav-item"><a class="nav-link px-2 text-muted" href="{% url 'company_select' %}"
-                        align="right">Company</a></li>
-                <li class="nav-item"><a class="nav-link px-2 text-muted" href="{% url 'researcher' %}"
-                        align="right">Researcher</a></li>
-                <li class="nav-item"><a class="nav-link px-2 text-muted" href="/admin" align="right">Admin</a></li>
+    <div class="container-fluid mt-auto bg-light " style="--bs-bg-opacity: .5;">
+        <footer class="py-0 my-0">
+            <ul class="nav justify-content-center border-bottom pb-0 mb-2">
+                <!-- <li class="nav-item"><span class="nav-link disabled px-2 text-muted">Pages:</span></li> -->
+                <li class="nav-item"><a class="nav-link px-5 text-grey  fs-5" href="{% url 'company_select' %}"
+                        >Company Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link px-5 text-grey  fs-5" href="{% url 'researcher' %}"
+                        >Researchers and Research Groups</a></li>
+                <li class="nav-item"><a class="nav-link px-5 text-grey  fs-5" href="/admin">Admin</a></li>
             </ul>
-            <p class="text-center text-muted">Copyright &copy; 2024 InRam</p>
+            <p class="text-end text-grey">Copyright &copy; 2024 InRam</p>
         </footer>
     </div>
 

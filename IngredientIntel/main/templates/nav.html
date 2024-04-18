@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <img class="navbar-brand" src="{% static 'images/INRAM_logo.png' %}" width="50" height="50" alt="InRam Logo">
+    <img class="navbar-brand ms-2" src="{% static 'images/INRAM_logo.png' %}" width="50" height="50" alt="InRam Logo">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -17,7 +17,7 @@
         {{ search_form }}
         <button class="nav-link" type="submit">Search</button>
       </form>
-
+      <a href="{% url 'scan_barcode' %}" type="submit" class="nav-link">Scan Barcode</a>
       <!-- <form class="search-container" method="post" action="{% url 'search_page' %}">
           {% csrf_token %}
           {{ search_form }}
