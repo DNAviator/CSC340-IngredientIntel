@@ -45,17 +45,6 @@ body {
   padding: 1rem;
 }
 
-.table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.table th,
-.table td {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-}
-
 .search-container {
   display: flex;
   align-items: center;
