@@ -186,3 +186,21 @@ class ImageModel(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Researcher(models.Model):
+    """
+    Data describing a researcher in the field of science.
+
+    Attributes:
+        first_name (CharField): The researcher's first name.
+        last_name (CharField): The researcher's last name.
+        email (EmailField): The researcher's email address (unique).
+        organization (CharField): The researcher's affiliation or organization.
+        publications (TextField, blank=True): A list of the researcher's publications (optional).
+    """
+
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    organization = models.TextField()
+    publications = models.TextField(blank=True)

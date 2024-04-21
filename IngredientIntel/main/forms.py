@@ -81,5 +81,15 @@ class CompanySelectionForm(forms.ModelForm):
         #Company.registered_users.
     companies = forms.ChoiceField()
 
-
-
+class ResearcherSignupForm(forms.ModelForm):
+    class Meta:
+        model = Researcher
+        fields = ('__all__')
+        widgets = { 
+           
+            'first_name': forms.TextInput(attrs={'class':'centerform'}),
+            'last_name': forms.TextInput(attrs={'class':'centerform'}),
+            'email': forms.EmailInput(attrs={'class':'centerform'}),
+            'organization': forms.TextInput(attrs={'class':'centerform'}),
+            'publication': forms.HiddenInput(),
+        }
