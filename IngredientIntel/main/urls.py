@@ -16,7 +16,6 @@ urlpatterns = [
     path("researcher_signup/", views.researcher_signup, name="researcher_signup"),
     path("company/<str:company>/", views.company, name="company"),
     path("about/", views.about, name="about"),
-    path("company_login/", views.login_page, name="company_login"),
     path("create_company/", views.create_company, name="create_company"),
     path("login/", views.login_page, name="researcher_login"),
     path('ingredient-autocomplete/', views.IngredientAutocomplete.as_view(), name='ingredient-autocomplete'),

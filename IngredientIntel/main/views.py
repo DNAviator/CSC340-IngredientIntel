@@ -100,8 +100,6 @@ def results_page(request, type, id):
 
     return render(request, "main/results_page.html", context)
 
-
-@login_required(redirect_field_name='login')
 def settings(request):
     """
     Returns the setting page if the user is authenticated as a consumer
@@ -212,15 +210,18 @@ def scan_barcode(request):
     context['form']= form
     return render(request, "main/scan_barcode.html", context)
 
-
-@login_required(redirect_field_name='login')
 def researcher(request):
-    return render(request, "main/researcher.html")
+    current_user = request.user
+    if current_user.is_authenticated:
+        if current_user.groups.filter(name = 'Researcher').exists():
+            return render(request, "main/researcher.html")
+    
+    messages.success(request, ('Please log into a research account'))
+    return redirect('login_researcher') # maybe not the cleanest solution
 
-@login_required(redirect_field_name='login')
 def company(request, company):
+
     company_object=Company.objects.get(name=company)
-    print(company_object.registered_users)
     if company_object.registered_users.filter(pk=request.user.pk).exists():
 
         if request.method == "POST":
@@ -240,17 +241,22 @@ def company(request, company):
         messages.success(request, ('Please log into a user account registered to this company...'))
         return redirect('login')
 
-@login_required(redirect_field_name='login')
-def update_product(request, product_object):
+
+def update_product(request, product_id):
     """
     Not configured yet, designed to allow for the update of products, should redirect to the company page after submission sending the post request to be dealt with there
     """
-    if product_object in Product.objects.all():
-        if product_object.producing_company.registered_users.filter(pk=request.user.pk).exists(): # check the user is allowed to do this
-            form = NewProductForm(product_object) # create filled in form to pass to view
-            return render(request, "", {'form':form}) # need to create a view for this
+    product_object = Product.objects.filter(id=product_id) # filter used to prevent crash
+    if not product_object:
+        messages.success(request, ('Critical Error item not found, please try again'))
+        redirect('select_company')
     
-    messages.success(request, ("There was a critical error with your request"))
+    company_object = Company.objects.get(id=product_object.producing_company) # can't crash since field is required
+    if company_object.registered_users.filter(pk=request.user.pk).exists():
+        form = NewProductForm(product_object) # create filled in form to pass to view
+        return render(request, "", {'form':form}) # need to create a view for this
+    
+    messages.success(request, ("Access Denied, not in company"))
     return redirect('home')
 
 def about(request):
