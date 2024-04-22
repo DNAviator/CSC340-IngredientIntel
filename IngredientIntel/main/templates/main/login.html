@@ -22,5 +22,10 @@
     </div>
 
 </form>
-<p align="center"> Don't have an account? <a href="{% url 'sign_up' %}">Sign up here </a> </p>
+{% if special %}
+    <p align="center"> Not registered as a researcher? <a href="{% url 'researcher_signup' %}">Sign up here </a> </p>
+{% else %}
+    <p align="center"> Don't have an account? <a href="{% url 'sign_up' %}">Sign up here </a> </p>
+{% endif %}
+
 {%endblock%}

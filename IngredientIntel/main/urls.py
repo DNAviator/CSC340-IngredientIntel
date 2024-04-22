@@ -14,10 +14,10 @@ urlpatterns = [
     path("logout/", views.logout_page, name="logout"),
     path("researcher/", views.researcher, name="researcher"),
     path("researcher_signup/", views.researcher_signup, name="researcher_signup"),
+    path("researcher_login/", views.researcher_login, name="researcher_login"),
     path("company/<str:company>/", views.company, name="company"),
     path("about/", views.about, name="about"),
     path("create_company/", views.create_company, name="create_company"),
-    path("login/", views.login_page, name="researcher_login"),
     path('ingredient-autocomplete/', views.IngredientAutocomplete.as_view(), name='ingredient-autocomplete'),
     path("company_select/", views.select_company, name="company_select")
 ]

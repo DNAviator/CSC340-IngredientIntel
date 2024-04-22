@@ -210,6 +210,15 @@ def scan_barcode(request):
     context['form']= form
     return render(request, "main/scan_barcode.html", context)
 
+
+def researcher_login(request):
+    # redirect to home if user is already logged in else return html
+    if request.user.is_authenticated:
+        messages.success(request, ("You are already logged in, logout before attempting to login"))
+        redirect('home')
+    
+    return render(request, "main/login.html", {"special": "True"})
+
 def researcher(request):
     current_user = request.user
     if current_user.is_authenticated:
@@ -217,7 +226,7 @@ def researcher(request):
             return render(request, "main/researcher.html")
     
     messages.success(request, ('Please log into a research account'))
-    return redirect('login_researcher') # maybe not the cleanest solution
+    return redirect('researcher_login') # maybe not the cleanest solution
 
 def company(request, company):
 
@@ -286,8 +295,13 @@ def select_company(request):
     return render(request, "main/company_select.html", {"valid_companies": valid_companies})
 
 def researcher_signup(request):
+
+    # if user is logged in redirect to home with appropriate message
     if request.user.is_authenticated:
-        messages.success(request, ("You are already logged in!"))
+        if request.user.group.filter(name='Researcher'):
+            messages.success(request, ("You are already logged in!"))
+        else:
+            messages.success(request, ("Logout of personal account before creating research account"))
         return redirect('home')
 
     if request.method == "POST":
