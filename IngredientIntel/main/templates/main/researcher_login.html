@@ -3,13 +3,14 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{% static 'signup.css' %}">
 {% endblock %}
-{%block title%}Login{%endblock%}
+{%block title%}Researcher Login{%endblock%}
 
 {% block content%}
-<form method="post" action="{% url 'login' %}">
+
+<form method="post" action="{% url 'researcher_login' %}">
     {% csrf_token %}
     <div class="container">
-        <h1 align="center">User Login</h1>
+        <h1 align="center">Researcher Login</h1>
         <br>
         <label for="username">Username:</label>
         <input class="centerform" type="username" placeholder="Enter Username" name="username" required><br>
@@ -22,7 +23,8 @@
     </div>
 
 </form>
-    <p align="center"> Don't have an account? <a href="{% url 'sign_up' %}">Sign up here </a> </p>
+
+<p align="center"> Not registered as a researcher? <a href="{% url 'researcher_signup' %}">Sign up here </a> </p>
 
 
 {%endblock%}

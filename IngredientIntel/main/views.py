@@ -40,14 +40,12 @@ class IngredientAutocomplete(autocomplete.Select2QuerySetView):
 
         return qs
     
-
 # Create your views here.
 def index(request):
     """
     returns the home page
     """
     return render(request, "main/index.html")
-
 
 def search_page(request):
 
@@ -179,16 +177,10 @@ def scan_barcode(request):
         form = BarcodeForm(request.POST, request.FILES)
         if form.is_valid(): 
             img = form.cleaned_data.get("image") # Stores image from form 
-            
-            
             obj = ImageModel.objects.create(img = img) # Creates an image model with an image as input
-           
             image_url = obj.img.path # stores directory of the image
-
             barcode = cv2.imread(image_url)
-
             os.unlink(image_url) # Removes image from media/images
-
             decoded = decode(barcode) # Decodes barcode from a user's image
             if len(decoded) == 0: #If barcode has nothing it points to, redirect to scan_barcode
                 return redirect('scan_barcode')
@@ -216,8 +208,19 @@ def researcher_login(request):
     if request.user.is_authenticated:
         messages.success(request, ("You are already logged in, logout before attempting to login"))
         redirect('home')
-    
-    return render(request, "main/login.html", {"special": "True"})
+    if request.method == "POST":
+        username = request.POST['username'] # get username from post
+        password = request.POST['password'] # get password from post
+        user = authenticate(request, username=username, password=password) # django auth attempt
+        if user is not None:
+            login(request, user) # actually log user in
+            messages.success(request, (f"Successfully logged in as {username}")) # send success message to html
+            return redirect('home') # redirect home
+        else:
+            messages.success(request, ("There was an error with your login, please try again"))
+            return redirect('./')
+
+    return render(request, "main/researcher_login.html")
 
 def researcher(request):
     current_user = request.user
