@@ -300,8 +300,8 @@ def delete_product(request, model_type, item_id):
     item_object = model.objects.filter(id=item_id)
 
     if not item_object:
-            messages.success(request, ('Critical Error item not found, please try again'))
-            redirect('home')
+        messages.success(request, ('Critical Error item not found, please try again'))
+        redirect('home')
 
     item_object = item_object[0]
     if model_type == "product":
