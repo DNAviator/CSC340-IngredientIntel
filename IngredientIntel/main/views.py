@@ -310,7 +310,16 @@ def delete_product(request, model_type, item_id):
         item_object.delete()
         messages.success(request, ("Item Successfuly Deleted")) # output sucess message
 
-        return redirect(f"/company/{item_object.producing_company.name}")
+    if model_type == "sciNote":
+        
+        if item_object.researcher.id != request.user.id:
+            messages.success(request, ("Access Denied"))
+            return redirect('home')
+        
+        item_object.delete()
+        messages.success(request, ("Item Successfuly Deleted")) # output sucess message
+
+        return redirect('researcher')
 
 
 def update_backend(request, model_type, item_id):

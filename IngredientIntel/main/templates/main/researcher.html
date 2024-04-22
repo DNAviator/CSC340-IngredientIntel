@@ -37,7 +37,7 @@
                         {% for note in notes %}
                         <tr>
                             <td>Ingredient: {{ note.ingredient }}</td>
-                            <td><a href="{% url 'update' 'sciNote' note.id %}">Update</a> | <a href="">Delete</a></td>
+                            <td><a href="{% url 'update' 'sciNote' note.id %}">Update</a> | <a href="{% url 'delete' 'sciNote' note.id %}">Delete</a></td>
                         </tr>
                         <tr>
                             <td colspan="2">Content: {{ note.notes_content }}</td>
