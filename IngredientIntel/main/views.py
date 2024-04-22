@@ -293,6 +293,26 @@ def update_item(request, model_type, item_id):
         messages.success(request, ('Critical Error, please try again'))
         redirect('home')
 
+
+def delete_product(request, model_type, item_id):
+
+    model = apps.get_model(app_label='main', model_name=model_type)
+    item_object = model.objects.filter(id=item_id)
+
+    item_object = item_object[0]
+    if model_type == "product":
+        company_object = Company.objects.get(id = item_object.producing_company.id) 
+        
+        if not company_object.registered_users.filter(pk=request.user.pk).exists():
+            messages.success(request, ("Access Denied"))
+            return redirect('home')
+        
+        item_object.delete()
+        messages.success(request, ("Item Successfuly Deleted")) # output sucess message
+
+        return redirect(f"/company/{item_object.producing_company.name}")
+
+
 def update_backend(request, model_type, item_id):
     
     if request.method == "POST":

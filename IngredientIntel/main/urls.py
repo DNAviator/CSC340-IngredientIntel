@@ -22,4 +22,5 @@ urlpatterns = [
     path("company_select/", views.select_company, name="company_select"),
     path("update/<str:model_type>/<int:item_id>/", views.update_item, name="update"),
     path("update_backend/<str:model_type>/<int:item_id>/", views.update_backend, name="update_backend"),
+    path("delete/<str:model_type>/<int:item_id>/", views.delete_product, name="delete"),
 ]

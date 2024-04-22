@@ -37,7 +37,7 @@
                         {% for product in products %}
                         <tr>
                             <td>{{ product.name }}</td>
-                            <td><a href="{% url 'update' 'product' product.id %}">Update</a> | <a href="">Delete</a></td>
+                            <td><a href="{% url 'update' 'product' product.id %}">Update</a> | <a href="{% url 'delete' 'product' product.id %}">Delete</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
