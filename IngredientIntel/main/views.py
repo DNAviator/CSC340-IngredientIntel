@@ -278,3 +278,23 @@ def select_company(request):
     current_user = request.user
     valid_companies = current_user.registered_users.all()
     return render(request, "main/company_select.html", {"valid_companies": valid_companies})
+
+def researcher_signup(request):
+    if request.user.is_authenticated:
+        messages.success(request, ("You are already logged in!"))
+        return redirect('home')
+
+    if request.method == "POST":
+        form = ResearcherSignUpForm(request.POST)  
+        if form.is_valid():                                                    
+            form.save()                                                        
+            newUser = User.objects.get(username=form.cleaned_data['username']) 
+            consumer = Group.objects.get(name='Researcher')                      
+            consumer.user_set.add(newUser)                                     
+            messages.success(request, 'Account created successfully')         
+            return redirect('login')
+        else:
+            messages.success(request, ("Error processing request, please try again"))
+            return render(request, "main/researcher_signup.html", {"form":form})
+    form = ResearcherSignUpForm() 
+    return render(request, "main/researcher_signup.html", {"form":form}) 

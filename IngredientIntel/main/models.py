@@ -160,7 +160,7 @@ class SCINote(models.Model):
         citations(models.TextField): Any citations to the full paper or other important resources, if the article is completely included no reference is needed, this field is optional
         ingredient(ForeignKey): A reference to the Ingredient model which the note is about, if that ingredient for any reason was deleted all related notes will be deleted
     """
-    researcher_names = models.TextField()
+    researcher_names = models.ForeignKey(User, on_delete=models.CASCADE)
     institution_name = models.TextField(blank=True)
     notes_content = models.TextField()
     citations = models.TextField(blank=True)
@@ -187,20 +187,3 @@ class ImageModel(models.Model):
     def __str__(self):
         return self.title
     
-class Researcher(models.Model):
-    """
-    Data describing a researcher in the field of science.
-
-    Attributes:
-        first_name (CharField): The researcher's first name.
-        last_name (CharField): The researcher's last name.
-        email (EmailField): The researcher's email address (unique).
-        organization (CharField): The researcher's affiliation or organization.
-        publications (TextField, blank=True): A list of the researcher's publications (optional).
-    """
-
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True)
-    organization = models.TextField()
-    publications = models.TextField(blank=True)

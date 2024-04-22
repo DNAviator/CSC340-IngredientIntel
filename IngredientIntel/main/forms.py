@@ -81,15 +81,23 @@ class CompanySelectionForm(forms.ModelForm):
         #Company.registered_users.
     companies = forms.ChoiceField()
 
-class ResearcherSignupForm(forms.ModelForm):
+class ResearcherSignUpForm(UserCreationForm):
+
+    first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
+    last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
+    email = forms.EmailField(max_length=128, widget=forms.EmailInput()) 
+
     class Meta:
-        model = Researcher
-        fields = ('__all__')
-        widgets = { 
-           
-            'first_name': forms.TextInput(attrs={'class':'centerform'}),
-            'last_name': forms.TextInput(attrs={'class':'centerform'}),
-            'email': forms.EmailInput(attrs={'class':'centerform'}),
-            'organization': forms.TextInput(attrs={'class':'centerform'}),
-            'publication': forms.HiddenInput(),
-        }
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2','email')
+    
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super(ResearcherSignUpForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['class'] = 'centerform'
+        self.fields['password1'].widget.attrs['class'] = 'centerform'
+        self.fields['password2'].widget.attrs['class'] = 'centerform'
+        self.fields['email'].widget.attrs['class'] = 'centerform'
+
+        for fieldname in ['username', 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
+

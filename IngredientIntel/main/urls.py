@@ -13,6 +13,7 @@ urlpatterns = [
     path("scan_barcode/", views.scan_barcode, name="scan_barcode"),
     path("logout/", views.logout_page, name="logout"),
     path("researcher/", views.researcher, name="researcher"),
+    path("researcher_signup/", views.researcher_signup, name="researcher_signup"),
     path("company/<str:company>/", views.company, name="company"),
     path("about/", views.about, name="about"),
     path("company_login/", views.login_page, name="company_login"),
