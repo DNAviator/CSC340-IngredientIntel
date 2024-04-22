@@ -6,17 +6,35 @@
 {% block title %}Signup as a Researcher{% endblock %}
 
 {% block content %}
-
-<form action="{% url 'researcher_signup' %}" method="post">
-    {% csrf_token %}
-    <div class="container" align="center">
+<div class="container" align="center">
+    <form action="{% url 'researcher_signup' %}" method="post">
         <h1>Register as a Researcher</h1>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" name="submit" value="Create Researcher" />
-        </form>
-    </div>
-</form>
+        {% csrf_token %}
+        <label class="form-label">First Name</label>
+        {{ form.first_name }}
+        <label for="exampleFormControlInput1" class="form-label">Last Name</label>
+        {{ form.last_name }}
+        <label for="exampleFormControlInput1" class="form-label">Username</label>
+        {{ form.username }}
+        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+        {{ form.email }}
+        <label for="exampleFormControlInput1" class="form-label">Password</label>
+        {{ form.password1 }}
+        <label for="exampleFormControlInput1" class="form-label">Confirm Password</label>
+        {{ form.password2 }}
+
+        {% for field, error in form.errors.items %}
+        {% for individual_error in error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ individual_error|striptags }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endfor %}
+
+        <input type="submit" name="submit" value="Create Researcher" />
+    </form>
+</div>
+
 
 {% endblock %}

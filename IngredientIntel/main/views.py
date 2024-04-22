@@ -110,7 +110,6 @@ def settings(request):
     # but need to figure out how to pull up editable form
     return render(request, "main/settings.html", {"settings":SettingsForm})
 
-
 def login_page(request):
     """
     login_page(request):
@@ -201,7 +200,6 @@ def scan_barcode(request):
         form = BarcodeForm()
     context['form']= form
     return render(request, "main/scan_barcode.html", context)
-
 
 def researcher_login(request):
     # redirect to home if user is already logged in else return html
@@ -312,8 +310,8 @@ def researcher_signup(request):
         if form.is_valid():                                                    
             form.save()                                                        
             newUser = User.objects.get(username=form.cleaned_data['username']) 
-            consumer = Group.objects.get(name='Researcher')                      
-            consumer.user_set.add(newUser)                                     
+            researcher_group = Group.objects.get(name='Researcher')                      
+            researcher_group.user_set.add(newUser)                                     
             messages.success(request, 'Account created successfully')         
             return redirect('login')
         else:
