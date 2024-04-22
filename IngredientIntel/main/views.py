@@ -265,23 +265,33 @@ def company(request, company):
         messages.success(request, ('Please log into a user account registered to this company...'))
         return redirect('login')
 
-
-def update_product(request, product_id):
+def update_item(request, model_type, item_id):
     """
     Not configured yet, designed to allow for the update of products, should redirect to the company page after submission sending the post request to be dealt with there
     """
-    product_object = Product.objects.filter(id=product_id) # filter used to prevent crash
-    if not product_object:
+    model = apps.get_model(app_label='main', model_name=model_type)
+    item_object = model.objects.filter(id=item_id) # filter used to prevent crash
+    if not item_object:
         messages.success(request, ('Critical Error item not found, please try again'))
-        redirect('select_company')
+        redirect('home')
     
-    company_object = Company.objects.get(id=product_object.producing_company) # can't crash since field is required
-    if company_object.registered_users.filter(pk=request.user.pk).exists():
-        form = NewProductForm(product_object) # create filled in form to pass to view
-        return render(request, "", {'form':form}) # need to create a view for this
-    
-    messages.success(request, ("Access Denied, not in company"))
-    return redirect('home')
+    item_object = item_object[0] # converts it from queryset to actual item
+
+    if model_type == "product":
+        company_object = Company.objects.get(id=item_object.producing_company.id) # can't crash since field is required
+        if company_object.registered_users.filter(pk=request.user.pk).exists():
+            form = NewProductForm(instance=item_object, producing_company=company_object.id) # create filled in form to pass to view
+            return render(request, "main/update.html", {'form':form, 'return_url':f"/company/{company_object.name}/"})
+        
+        messages.success(request, ("Access Denied, not in company"))
+        return redirect('home')
+    elif model_type == "sciNote":
+        if request.user.id == item_object.researcher.id:
+            form = SCInoteForm(instance=item_object, researcher=item_object.researcher.id) # create filled in form to pass to view
+            return render(request, "main/update.html", {'form':form, 'return_url': "/researcher/"})
+    else:
+        messages.success(request, ('Critical Error, please try again'))
+        redirect('home')
 
 def about(request):
     return render(request, "main/about.html")
