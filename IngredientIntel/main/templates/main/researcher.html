@@ -1,39 +1,94 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Researcher{% endblock %}
+{% block title %}Researcher Page{%endblock%}
 
 {% block content %}
-
-{% block extra_css %}
 <style>
-.banner {
-    background-color: rgb(0, 140, 255);
-    color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-}
+    .banner {
+        background-color: rgba(67, 170, 255, 0.603);
+        color: white;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 </style>
-{% endblock %}
-    <div class="banner">
-        <h1>Welcome, Researcher!</h1>
-    </div>
-    
-    <div class="container">
-    <p>You can publish your scientific notes regarding specific ingredients here:</p>
-    
-    <form method="post" action="{% url 'researcher' %}">
-        {% csrf_token %}
-        <label for="ingredient">Ingredient:</label>
-        <input type="text" id="ingredient" name="ingredient" required><br><br>
-        
-        <label for="author">Author:</label>
-        <input type="text" id="author" name="author" required><br><br>
-        
-        <label for="content">Note Content:</label><br>
-        <textarea id="content" name="content" rows="5" required></textarea><br><br>
-        
-        <button type="submit">Publish Note</button>
-    </form>
+<div class="banner">
+    <h1>{{ user.username }} Dashboard</h1>
 </div>
+<br>
+<div class="container">
+    <form class="row mb-3 align-items-start">
+        <div class="col-8">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for Specific Products..."
+                    aria-label="Recipient's username with two button addons">
+                <button class="btn btn-outline-secondary" type="button">Search</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card h-100 overflow-auto">
+                <div class="card-header">
+                    Current Products
+                </div>
+                <table class="table table-hover">
+                    <tbody>
+                        {% for note in notes %}
+                        <tr>
+                            <td>Ingredient: {{ note.ingredient }}</td>
+                            <td><a href="">Update</a> | <a href="">Delete</a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Content: {{ note.notes_content }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    Create New Scientific Note
+                </div>
+                <div class="card-body">
+
+                    <form method="POST" >
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="Add Scientific Note">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Black magic that allows the select multiple to work nicely -->
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ form.media }}
+
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>
 {% endblock %}

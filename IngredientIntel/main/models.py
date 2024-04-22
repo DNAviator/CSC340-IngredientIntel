@@ -154,21 +154,21 @@ class SCINote(models.Model):
     Data describing a scientific note applied to a specific ingredient
 
     Attributes:
-        researcher_names(models.TextField): The name(s) of the contributing author(s)
-        institution_name(models.TextField): The name of the institutional sponser of the note, this field is optional
+        researcher(models.ForeignKey): The account publishing the work
+        research_credits(models.TextField): The names of the researchers and institutional sponsers of the note, this field is optional
         notes_content(models.TextField): The description and details of the research note (at the very least the abstract)
         citations(models.TextField): Any citations to the full paper or other important resources, if the article is completely included no reference is needed, this field is optional
         ingredient(ForeignKey): A reference to the Ingredient model which the note is about, if that ingredient for any reason was deleted all related notes will be deleted
     """
-    researcher_names = models.ForeignKey(User, on_delete=models.CASCADE)
-    institution_name = models.TextField(blank=True)
+    researcher = models.ForeignKey(User, on_delete=models.CASCADE)
+    research_credits = models.TextField(blank=True)
     notes_content = models.TextField()
     citations = models.TextField(blank=True)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
 
     def __str__(self):
         """Return a human-readable representation of the SCINote object."""
-        return f"Related ingredient: {self.ingredient}\nAuthors: {self.researcher_names}\nInstitutional Sponsor: {self.institution_name}\nNote: {self.notes_content}"
+        return f"Related ingredient: {self.ingredient}\nAuthors: {self.research_credits}\nNote: {self.notes_content}"
 
     class Meta:
         verbose_name = "Scientific Notes"

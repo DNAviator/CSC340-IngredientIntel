@@ -45,7 +45,7 @@ class NewProductForm(forms.ModelForm):
         parent_company = kwargs.pop('producing_company')
         super().__init__(*args, **kwargs)
 
-        self.fields['producing_company'].initial = parent_company #**** THIS NEEDS TO BE FIXED PROBABLY user.company   Set initial value based on user's company
+        self.fields['producing_company'].initial = parent_company # sets producing company on initialization
 
     class Meta:
         model = Product
@@ -74,13 +74,6 @@ class ConsumerCreationForm(UserCreationForm):
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
 
-class CompanySelectionForm(forms.ModelForm):
-    print()
-    #companies = autocomplete.ModelSelect2Multiple(url='ingredient-autocomplete'),
-    #for items in Company.objects :
-        #Company.registered_users.
-    companies = forms.ChoiceField()
-
 class ResearcherSignUpForm(UserCreationForm):
 
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
@@ -101,3 +94,17 @@ class ResearcherSignUpForm(UserCreationForm):
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
 
+class SCInoteForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        researcher = kwargs.pop('researcher')
+        super().__init__(*args, **kwargs)
+
+        self.fields['researcher'].initial = researcher # sets producing company on initialization
+
+    class Meta:
+        model = SCINote
+        fields = ('__all__')
+        widgets = {
+            'ingredient': autocomplete.ModelSelect2(url='ingredient-autocomplete'),
+            'researcher': forms.HiddenInput()
+        }

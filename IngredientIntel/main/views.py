@@ -224,7 +224,21 @@ def researcher(request):
     current_user = request.user
     if current_user.is_authenticated:
         if current_user.groups.filter(name = 'Researcher').exists():
-            return render(request, "main/researcher.html")
+            if request.method == "POST":
+                form = SCInoteForm(request.POST, researcher=current_user) # initializes form with post request and foreign key
+
+                if form.is_valid():
+                    form.save() # Adds product to the database
+                    messages.success(request, ("Scientific Note Successfuly Created")) # output sucess message
+                    return redirect('./') #keeps user at same directory
+                else:
+                    messages.success(request, ("Error Creating Product"))
+                    return redirect('./')
+            
+            notes = SCINote.objects.filter(researcher=current_user)
+            form = SCInoteForm(researcher=current_user)
+
+            return render(request, "main/researcher.html", {'notes':notes, 'form':form})
     
     messages.success(request, ('Please log into a research account'))
     return redirect('researcher_login') # maybe not the cleanest solution
@@ -246,7 +260,7 @@ def company(request, company):
                 return redirect('./')
         form = NewProductForm(producing_company=company_object) # this needs to be fixed
         products = Product.objects.filter(producing_company=company_object) # get all the products this user has created
-        return render(request, "main/company.html", {'form':form, 'products':products})
+        return render(request, "main/company.html", {'form':form, 'products':products, 'company_name':company})
     else:
         messages.success(request, ('Please log into a user account registered to this company...'))
         return redirect('login')
