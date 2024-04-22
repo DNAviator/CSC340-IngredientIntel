@@ -313,8 +313,7 @@ def delete_product(request, model_type, item_id):
         
         item_object.delete()
         messages.success(request, ("Item Successfuly Deleted")) # output sucess message
-
-    if model_type == "sciNote":
+    elif model_type == "sciNote":
         
         if item_object.researcher.id != request.user.id:
             messages.success(request, ("Access Denied"))
@@ -324,6 +323,10 @@ def delete_product(request, model_type, item_id):
         messages.success(request, ("Item Successfuly Deleted")) # output sucess message
 
         return redirect('researcher')
+    # catch all for things like invalid forms or get requests
+    messages.success(request, ("Access Denied"))
+    return redirect('home')
+
 
 
 def update_backend(request, model_type, item_id):
