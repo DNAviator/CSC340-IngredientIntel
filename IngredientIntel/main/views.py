@@ -281,17 +281,65 @@ def update_item(request, model_type, item_id):
         company_object = Company.objects.get(id=item_object.producing_company.id) # can't crash since field is required
         if company_object.registered_users.filter(pk=request.user.pk).exists():
             form = NewProductForm(instance=item_object, producing_company=company_object.id) # create filled in form to pass to view
-            return render(request, "main/update.html", {'form':form, 'return_url':f"/company/{company_object.name}/"})
+            return render(request, "main/update.html", {'form':form, 'model_type':model_type, 'item_id':item_id})
         
         messages.success(request, ("Access Denied, not in company"))
         return redirect('home')
     elif model_type == "sciNote":
         if request.user.id == item_object.researcher.id:
             form = SCInoteForm(instance=item_object, researcher=item_object.researcher.id) # create filled in form to pass to view
-            return render(request, "main/update.html", {'form':form, 'return_url': "/researcher/"})
+            return render(request, "main/update.html", {'form':form, 'model_type':model_type, 'item_id':item_id})
     else:
         messages.success(request, ('Critical Error, please try again'))
         redirect('home')
+
+def update_backend(request, model_type, item_id):
+    
+    if request.method == "POST":
+        model = apps.get_model(app_label='main', model_name=model_type)
+        item_object = model.objects.filter(id=item_id) # filter used to prevent crash
+        if not item_object:
+            messages.success(request, ('Critical Error item not found, please try again'))
+            redirect('home')
+
+        item_object = item_object[0] # converts it from queryset to actual item
+        if model_type == "product":
+            company_object = Company.objects.get(id = item_object.producing_company.id) # can't crash since field is required
+
+            # if the user does not belong to the company break out before editing item
+            if not company_object.registered_users.filter(pk=request.user.pk).exists():
+                messages.success(request, ("Access Denied"))
+                return redirect('home')
+            
+            form = NewProductForm(request.POST, producing_company=company_object.id) # create filled in form to pass to view
+            if form.is_valid():
+                item_object.delete()
+                form.save()
+                messages.success(request, ("Item Successfuly Updated")) # output sucess message
+                return redirect(f"/company/{item_object.producing_company.name}")
+            else:
+                messages.success(request, ("Error Creating Product"))
+
+        elif model_type == "sciNote":
+            form = SCInoteForm(request.POST, researcher=request.user.id) # initializes form with post request and foreign key
+            
+            # if the researcher is not the one who created the note they are trying to enter break out
+            if item_object.researcher.id != request.user.id:
+                messages.success(request, ("Access Denied"))
+                return redirect('home')
+            
+            if form.is_valid():
+                item_object.delete()
+                form.save() # Adds product to the database
+                messages.success(request, ("Scientific Note Successfuly Updated")) # output sucess message
+                return redirect('researcher')
+            else:
+                messages.success(request, ("Error Creating Product"))
+
+    # catch all for things like invalid forms or get requests
+    messages.success(request, ("Access Denied"))
+    return redirect('home')
+                
 
 def about(request):
     return render(request, "main/about.html")
