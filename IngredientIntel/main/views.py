@@ -300,6 +300,10 @@ def delete_product(request, model_type, item_id):
     model = apps.get_model(app_label='main', model_name=model_type)
     item_object = model.objects.filter(id=item_id)
 
+    if not item_object:
+        messages.success(request, ('Critical Error item not found, please try again'))
+        redirect('home')
+
     item_object = item_object[0]
     if model_type == "product":
         company_object = Company.objects.get(id = item_object.producing_company.id) 
@@ -310,8 +314,7 @@ def delete_product(request, model_type, item_id):
         
         item_object.delete()
         messages.success(request, ("Item Successfuly Deleted")) # output sucess message
-
-    if model_type == "sciNote":
+    elif model_type == "sciNote":
         
         if item_object.researcher.id != request.user.id:
             messages.success(request, ("Access Denied"))
@@ -321,6 +324,10 @@ def delete_product(request, model_type, item_id):
         messages.success(request, ("Item Successfuly Deleted")) # output sucess message
 
         return redirect('researcher')
+    # catch all for things like invalid forms or get requests
+    messages.success(request, ("Access Denied"))
+    return redirect('home')
+
 
 
 def update_backend(request, model_type, item_id):
