@@ -21,6 +21,7 @@ import os
 import cv2
 from pyzbar.pyzbar import decode
 from dal import autocomplete
+import requests
 
 
 
@@ -420,3 +421,12 @@ def researcher_signup(request):
             return render(request, "main/researcher_signup.html", {"form":form})
     form = ResearcherSignUpForm() 
     return render(request, "main/researcher_signup.html", {"form":form}) 
+
+def fetch_api_data(request):
+    response = requests.get('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6').json()
+    
+    response=response['foods']
+    
+    
+    #print(response['foods'])
+    return render(request, 'main/Ingredients.html',{'response':response})

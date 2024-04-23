@@ -23,4 +23,5 @@ urlpatterns = [
     path("update/<str:model_type>/<int:item_id>/", views.update_item, name="update"),
     path("update_backend/<str:model_type>/<int:item_id>/", views.update_backend, name="update_backend"),
     path("delete/<str:model_type>/<int:item_id>/", views.delete_product, name="delete"),
+    path("ingred",views.fetch_api_data, name = "Ingredients")
 ]

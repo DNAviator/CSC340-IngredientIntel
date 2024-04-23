@@ -23,6 +23,13 @@
                 <input type="text" class="form-control" placeholder="Search for Specific Products..."
                     aria-label="Recipient's username with two button addons">
                 <button class="btn btn-outline-secondary" type="button">Search</button>
+
+                <form action="" method="get">
+                    {% csrf_token %}
+                    <input type="text" name="q" placeholder="Scientific Notes">
+                    <button type="submit" >Search</button>
+                </form>
+
             </div>
         </div>
     </form>
