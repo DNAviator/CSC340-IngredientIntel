@@ -295,7 +295,7 @@ def update_item(request, model_type, item_id):
         redirect('home')
 
 
-def delete_product(request, model_type, item_id):
+def delete_product(request, model_type, item_id): # Delete product takes the model as a parameter deletes the product or the scientific notes depending on if the user is "Company" or "Researcher"
 
     model = apps.get_model(app_label='main', model_name=model_type)
     item_object = model.objects.filter(id=item_id)
@@ -314,9 +314,9 @@ def delete_product(request, model_type, item_id):
         
         item_object.delete()
         messages.success(request, ("Item Successfuly Deleted")) # output sucess message
-    elif model_type == "sciNote":
+    elif model_type == "sciNote": # Check if the model is sciNote
         
-        if item_object.researcher.id != request.user.id:
+        if item_object.researcher.id != request.user.id:# if the user is a researcher who created the sciNote, then allows the user to delete the sciNote, if not, the denies access
             messages.success(request, ("Access Denied"))
             return redirect('home')
         
@@ -360,7 +360,7 @@ def update_backend(request, model_type, item_id):
         elif model_type == "sciNote":
             form = SCInoteForm(request.POST, researcher=request.user.id) # initializes form with post request and foreign key
             
-            # if the researcher is not the one who created the note they are trying to enter break out
+            # if the researcher is not the one who created the note they are trying to update break out
             if item_object.researcher.id != request.user.id:
                 messages.success(request, ("Access Denied"))
                 return redirect('home')
