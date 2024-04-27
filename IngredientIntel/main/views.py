@@ -107,9 +107,17 @@ def settings(request):
         messages.success(request, ("Login before accessing settings"))
         return redirect('login')
 
-    # need to add functionality to view the current settings probably can show things easily
-    # but need to figure out how to pull up editable form
-    return render(request, "main/settings.html", {"settings":SettingsForm})
+    if request.method == "POST":
+        form = SettingsForm(request.POST)
+        if form.is_valid():
+            form.instance.user = request.user
+            form.save()
+            messages.success(request, ("Settings successfully updated!"))
+        else:
+            messages.success(request, ("There was a problem updating your settings please try again"))
+    
+    user_settings = Profile.objects.get_or_create(pk = request.user.id) # should be replaced since all users should have settings
+    return render(request, "main/settings.html", {"form":SettingsForm(instance=user_settings[0])})
 
 def login_page(request):
     """
@@ -250,16 +258,17 @@ def company(request, company):
     if company_object.registered_users.filter(pk=request.user.pk).exists():
 
         if request.method == "POST":
-            form = NewProductForm(request.POST, producing_company=company_object) # initializes form with post request and foreign key
+            form = NewProductForm(request.POST) # initializes form with post request and foreign key
 
             if form.is_valid():
+                form.instance.producing_company = company_object
                 form.save() # Adds product to the database
                 messages.success(request, ("Product Successfuly Created")) # output sucess message
                 return redirect('./') #keeps user at same directory
             else:
                 messages.success(request, ("Error Creating Product"))
                 return redirect('./')
-        form = NewProductForm(producing_company=company_object) # this needs to be fixed
+        form = NewProductForm()
         products = Product.objects.filter(producing_company=company_object) # get all the products this user has created
         return render(request, "main/company.html", {'form':form, 'products':products, 'company_name':company})
     else:
@@ -281,7 +290,7 @@ def update_item(request, model_type, item_id):
     if model_type == "product":
         company_object = Company.objects.get(id=item_object.producing_company.id) # can't crash since field is required
         if company_object.registered_users.filter(pk=request.user.pk).exists():
-            form = NewProductForm(instance=item_object, producing_company=company_object.id) # create filled in form to pass to view
+            form = NewProductForm(instance=item_object) # create filled in form to pass to view
             return render(request, "main/update.html", {'form':form, 'model_type':model_type, 'item_id':item_id})
         
         messages.success(request, ("Access Denied, not in company"))
@@ -294,8 +303,7 @@ def update_item(request, model_type, item_id):
         messages.success(request, ('Critical Error, please try again'))
         redirect('home')
 
-
-def delete_product(request, model_type, item_id): # Delete product takes the model as a parameter deletes the product or the scientific notes depending on if the user is "Company" or "Researcher"
+def delete_product(request, model_type, item_id): 
 
     model = apps.get_model(app_label='main', model_name=model_type)
     item_object = model.objects.filter(id=item_id)
@@ -314,6 +322,8 @@ def delete_product(request, model_type, item_id): # Delete product takes the mod
         
         item_object.delete()
         messages.success(request, ("Item Successfuly Deleted")) # output sucess message
+        return redirect(f"/company/{company_object.name}/")
+    
     elif model_type == "sciNote": # Check if the model is sciNote
         
         if item_object.researcher.id != request.user.id:# if the user is a researcher who created the sciNote, then allows the user to delete the sciNote, if not, the denies access
@@ -327,8 +337,6 @@ def delete_product(request, model_type, item_id): # Delete product takes the mod
     # catch all for things like invalid forms or get requests
     messages.success(request, ("Access Denied"))
     return redirect('home')
-
-
 
 def update_backend(request, model_type, item_id):
     
@@ -348,8 +356,9 @@ def update_backend(request, model_type, item_id):
                 messages.success(request, ("Access Denied"))
                 return redirect('home')
             
-            form = NewProductForm(request.POST, producing_company=company_object.id) # create filled in form to pass to view
+            form = NewProductForm(request.POST) # create filled in form to pass to view
             if form.is_valid():
+                form.instance.producing_company = company_object.id
                 item_object.delete()
                 form.save()
                 messages.success(request, ("Item Successfuly Updated")) # output sucess message
@@ -377,22 +386,26 @@ def update_backend(request, model_type, item_id):
     messages.success(request, ("Access Denied"))
     return redirect('home')
                 
-
 def about(request):
     return render(request, "main/about.html")
 
 def create_company(request):
+    if not request.user.is_authenticated:
+        messages.success(request, ("Please Login First"))
+        return redirect('login')
+
     if request.method == "POST":
         form = NewCompanyForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_item = form.save()
+            new_item.registered_users.add(request.user.id)
             messages.success(request, ("Company Created Successfully"))
             return redirect('company', request.POST['name'])
         else:
             messages.success(request, ("Error with company creation please try again..."))
             return redirect('create_company')
 
-    return render(request, "main/company_signup.html", {"form": NewCompanyForm()})
+    return render(request, "main/company_signup.html", {"form": NewCompanyForm})
 
 def select_company(request):
     # Get the current user and then do a reverse match on the related name of the registered user field of the company model

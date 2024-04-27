@@ -1,8 +1,6 @@
 from django.db import models
 from django.db.models import Func, F
 from django.db.models.functions import Cast
-from django.contrib.auth.models import User
-
 from django.conf import settings
 import os
 
@@ -79,7 +77,7 @@ class Company(models.Model):
     products = models.ManyToManyField('Product', related_name='products', blank=True)
     date_founded = models.DateField()
     notes = models.TextField(blank=True)
-    registered_users = models.ManyToManyField(User, related_name='registered_users', blank=False)
+    registered_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='registered_users')
     company_registration_number = models.CharField(max_length=9, unique=True)
     company_address = models.TextField(blank=False)
 
@@ -160,7 +158,7 @@ class SCINote(models.Model):
         citations(models.TextField): Any citations to the full paper or other important resources, if the article is completely included no reference is needed, this field is optional
         ingredient(ForeignKey): A reference to the Ingredient model which the note is about, if that ingredient for any reason was deleted all related notes will be deleted
     """
-    researcher = models.ForeignKey(User, on_delete=models.CASCADE)
+    researcher = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     research_credits = models.TextField(blank=True)
     notes_content = models.TextField()
     citations = models.TextField(blank=True)
@@ -174,6 +172,22 @@ class SCINote(models.Model):
         verbose_name = "Scientific Notes"
         verbose_name_plural = "Scientific Notes"
     
+
+class Profile(models.Model):
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    flagged_ingredients = models.ManyToManyField(Ingredient, blank=True)
+    LIGHT_M = 'L'
+    DARK_M = 'R'
+    color_mode_choices = [
+        (LIGHT_M, "Light"),
+        (DARK_M, "Dark")
+    ]
+    color_mode = models.CharField(max_length=1,
+                                   choices=color_mode_choices,
+                                    default=LIGHT_M)
+
+
 
 class ImageModel(models.Model):
     """

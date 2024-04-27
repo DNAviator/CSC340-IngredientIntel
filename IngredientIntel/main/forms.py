@@ -12,10 +12,13 @@ class SearchForm(forms.Form):
     model = forms.ChoiceField(choices=[('Product', 'Product'), ('Ingredient', 'Ingredient'), ('Company', 'Company')], required=True, label="")
     query = forms.CharField(label="", required=True)
 
-class SettingsForm(forms.Form):
-    display_mode = forms.ChoiceField(choices=[("light", "Light"), ("dark", "Dark")], required=True, label="Color Modes:")
-    diet_mode = forms.ChoiceField(choices=[(" ", " "),("no restrictions", "No Restrictions"),("vegetarion", "Vegetarian"),("vegan", "Vegan"),("pescatarion", "Pescartarian")], required=True, label="Hide Items:")
-    new_name = forms.CharField(required=False, label="Name Changer:")
+class SettingsForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['flagged_ingredients', 'color_mode']
+        widgets = {
+            'flagged_ingredients': autocomplete.ModelSelect2Multiple(url='ingredient-autocomplete'),
+        }
 
 class BarcodeForm(forms.Form):
     #name = forms.CharField(widget=forms.TextInput(attrs={'class':'centerform'}))
@@ -25,9 +28,8 @@ class BarcodeForm(forms.Form):
 class NewCompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ('__all__')
+        fields = ['name', 'date_founded', 'notes', 'company_registration_number', 'company_address']
         widgets = { 
-            'products': forms.HiddenInput(),
             'name': forms.TextInput(attrs={'class':'centerform'}),
             'date_founded': forms.DateInput(
                 format=('%Y-%m-%d'),
@@ -40,19 +42,13 @@ class NewCompanyForm(forms.ModelForm):
             'company_address': forms.TextInput(attrs={'class':'centerform'}),
         }
 
+
 class NewProductForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        parent_company = kwargs.pop('producing_company')
-        super().__init__(*args, **kwargs)
-
-        self.fields['producing_company'].initial = parent_company # sets producing company on initialization
-
     class Meta:
         model = Product
-        fields = ('__all__')
+        fields = ['ingredients', 'name', 'warnings', 'notes', 'item_id']
         widgets = {
             'ingredients': autocomplete.ModelSelect2Multiple(url='ingredient-autocomplete'),
-            'producing_company': forms.HiddenInput()
         }
 
 class ConsumerCreationForm(UserCreationForm):

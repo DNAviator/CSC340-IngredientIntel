@@ -8,36 +8,39 @@
 
 {% block content %}
 
-    <form method="post" action="">
-        {% csrf_token %}
+<form method="post" action="{% url 'settings' %}">
+    
     <div class="container mt-5">
         <h1>Settings</h1>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <td><label for="display_mode"></label>Color Scheme:</td>
-                    <td>{{ settings.display_mode }}</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><label for="diet_mode"></label>Diet Restrictions:</td>
-                    <td>{{ settings.diet_mode }}</td>
-                </tr>
-
-                <tr>
-                    <td><label for="new_name"></label>New Name:</td>
-                    <td>{{ settings.new_name }}</td>
-                </tr>
-
-            </tbody>
-        </table>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" class="btn btn-primary ms-2">
     </div>
-    <p align="center">
-        <a href="{% url 'home' %}" type="submit" class="btn btn-primary ms-2">Save</a>
-    </p>
-    </form>
+</form>
 
-    
+<!-- Black magic that allows the select multiple to work nicely -->
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ form.media }}
+
+<script>
+    (function ($) {
+        $('#add-form').click(function () {
+            var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+            var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+            newTable.find(':input').each(function () {
+                for (attr of ['name', 'id'])
+                    $(this).attr(
+                        attr,
+                        $(this).attr(attr).replace('__prefix__', index)
+                    )
+            })
+            newTable.insertBefore($(this))
+            $('#id_inline_test_models-TOTAL_FORMS').val(
+                parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+            )
+            newTable.slideDown()
+        })
+    })($)
+</script>
 {%endblock%}
