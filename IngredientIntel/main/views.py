@@ -430,7 +430,7 @@ def researcher_signup(request):
     return render(request, "main/researcher_signup.html", {"form":form}) 
 
 def fetch_api_data(request):
-    response = requests.get('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6').json()
+    response = requests.get('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6&query=lays').json()
     
     response=response['foods']
     
