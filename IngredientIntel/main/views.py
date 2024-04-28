@@ -63,6 +63,12 @@ def search_page(request):
         paginator = Paginator(search_results, 25)                    # paginator class from django show 2 results of the model output
         page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
         page_obj = paginator.get_page(page_number)                  # paginator returns the page data
+        if request.user.is_authenticated:
+            flagged_ingredients = Profile.objects.get(pk = request.user.id).flagged_ingredients.all()
+            for item in page_obj:
+                if (item.ingredients.all() & flagged_ingredients):
+                    item.flag = True
+
 
         # render page (added params to keep search paramaters through the different pages.
         return render(request, "main/search_page.html", {"page_obj": page_obj, "model": search_model, "params":urlencode({"model":search_model, "query":search_query})})
@@ -97,7 +103,7 @@ def results_page(request, type, id):
 
     return render(request, "main/results_page.html", context)
 
-def settings(request):
+def settings_page(request):
     """
     Returns the setting page if the user is authenticated as a consumer
     """

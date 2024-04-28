@@ -14,7 +14,10 @@
         <a class="list-group-item list-group-item-action" href="{% url 'result_page' model result.id %}">
             <!-- <li class="list-group-item d-flex justify-content-between align-items-start"> -->
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1 fw-bold">{{ result.name }}</h5>
+                <h5 class="mb-1">{{ result.name }}</h5>
+                {% if result.flag %}
+                <span class="badge bg-danger rounded-pill">Flag Detected</span>
+                {% endif %}
             </div>
 
             {% if model == "Ingredient" %}
@@ -23,9 +26,7 @@
             <p class="mb-1 text-start"> {{ result.notes }}</p>
             {% endif %}
 
-            {% if result.ingredients in user_settings.flag_ingredients %}
-            <span class="badge bg-primary rounded-pill">Contains Flagged Ingredient</span>
-            {% endif %}
+
             <!-- </li> -->
         </a>
         {% endfor %}
