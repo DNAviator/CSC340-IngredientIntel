@@ -76,9 +76,9 @@ def results_page(request, type, id):
 
     #Get the model from the type, get the exact item or return 404    
     model_obj = apps.get_model('main', type)
-    info = get_object_or_404(model_obj, pk=id)
-    info = model_to_dict(info)
-
+    info_model = get_object_or_404(model_obj, pk=id)
+    info = model_to_dict(info_model)
+    user_flags = []
     del info["id"]
     if "registered_users" in info.keys(): # Delete dangerous field if it exists
         del info["registered_users"]
@@ -86,11 +86,14 @@ def results_page(request, type, id):
         del info["company_registration_number"]
 
     if "ingredients" in info.keys():
+        if request.user.is_authenticated:
+            flagged_ingredients = Profile.objects.get(pk = request.user.id).flagged_ingredients.all()
+            user_flags = info_model.ingredients.all() & flagged_ingredients
         info["ingredients"] = ", ".join([item.name for item in info["ingredients"]])
         info["producing_company"] = Company.objects.get(pk=info["producing_company"]).name
 
 
-    context = {"type": type, "info": info}
+    context = {"type": type, "info": info, "user_flags":user_flags}
 
     return render(request, "main/results_page.html", context)
 

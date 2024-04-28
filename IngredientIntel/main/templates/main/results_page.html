@@ -2,6 +2,13 @@
 {% block title %}Results Page{% endblock %}
 
 {% block content %}
+{% if user_flags %}
+{% for item in user_flags %}
+<div class="alert alert-danger show" role="alert">
+  Warning item contains: {{ item }}
+</div>
+{% endfor %}
+{% endif %}
 <div class="container mt-5">
 
   <table class="table table-hover">
@@ -14,9 +21,6 @@
     </tbody>
     {% endfor %}
   </table>
-
-
-
 </div>
 
 {% endblock %}
