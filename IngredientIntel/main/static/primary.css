@@ -29,12 +29,6 @@ body {
   transition: background-color 0.2s ease-in-out;
 }
 
-/* Change background color on hover */
-.nav-link:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
 .navbar .navbar-brand {
   color: #007bff;
 }
