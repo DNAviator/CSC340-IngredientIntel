@@ -174,13 +174,13 @@ class Profile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     flagged_ingredients = models.ManyToManyField(Ingredient, blank=True)
-    LIGHT_M = 'L'
-    DARK_M = 'R'
+    LIGHT_M = 'light'
+    DARK_M = 'dark'
     color_mode_choices = [
         (LIGHT_M, "Light"),
         (DARK_M, "Dark")
     ]
-    color_mode = models.CharField(max_length=1,
+    color_mode = models.CharField(max_length=5,
                                    choices=color_mode_choices,
                                     default=LIGHT_M)
 

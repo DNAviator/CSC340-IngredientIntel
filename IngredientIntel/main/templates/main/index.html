@@ -7,7 +7,6 @@
   body {
     background-image: url("{% static 'images/IndexBG.jpg' %}");
     /* The image used */
-    background-color: #cccccc;
     /* Used if the image is unavailable */
     height: 500px;
     /* You must set a specified height */
@@ -20,7 +19,7 @@
   }
 </style>
 <br><br>
-<div class="container p-5 bg-light" style="--bs-bg-opacity: .6;">
+<div class="container p-5 bg-{{ user_color_mode}}" style="--bs-bg-opacity: .6;">
 
   <div class="row justify-content-center">
     <div class="col-md-12">

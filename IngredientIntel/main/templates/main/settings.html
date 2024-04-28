@@ -10,7 +10,7 @@
 
 <form method="post" action="{% url 'settings' %}">
     
-    <div class="container mt-5">
+    <div class="container container-{{ user_color_mode }} mt-5">
         <h1>Settings</h1>
         {% csrf_token %}
         {{ form.as_p }}

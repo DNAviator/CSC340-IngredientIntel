@@ -13,12 +13,17 @@ class SearchForm(forms.Form):
     query = forms.CharField(label="search...", required=True, widget=forms.TextInput(attrs={'placeholder':"Search...", 'class':'form-control', 'type':'text'}))
 
 class SettingsForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super(SettingsForm, self).__init__(*args, **kwargs)
+        self.fields['color_mode'].widget.attrs['class'] = 'form-select'
     class Meta:
         model = Profile
         fields = ['flagged_ingredients', 'color_mode']
         widgets = {
             'flagged_ingredients': autocomplete.ModelSelect2Multiple(url='ingredient-autocomplete'),
-        }
+            }
+        
+        
 
 class BarcodeForm(forms.Form):
     #name = forms.CharField(widget=forms.TextInput(attrs={'class':'centerform'}))
