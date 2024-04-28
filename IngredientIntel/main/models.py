@@ -57,7 +57,6 @@ class Ingredient(models.Model):
         """Return a human-readable representation of the ingredient object."""
         return self.name
 
-
 class Company(models.Model):
     """
     Represents a company that produces products.
@@ -97,7 +96,6 @@ class Company(models.Model):
     def __str__(self):
         """Return a human-readable representation of the company object."""
         return self.name
-
 
 class Product(models.Model):
     """
@@ -172,7 +170,6 @@ class SCINote(models.Model):
         verbose_name = "Scientific Notes"
         verbose_name_plural = "Scientific Notes"
     
-
 class Profile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
@@ -186,8 +183,6 @@ class Profile(models.Model):
     color_mode = models.CharField(max_length=1,
                                    choices=color_mode_choices,
                                     default=LIGHT_M)
-
-
 
 class ImageModel(models.Model):
     """

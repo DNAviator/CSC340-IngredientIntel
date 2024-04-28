@@ -82,18 +82,13 @@ def results_page(request, type, id):
     del info["id"]
     if "registered_users" in info.keys(): # Delete dangerous field if it exists
         del info["registered_users"]
+        info["products"] =  ", ".join([item.name for item in info["products"]])
+        del info["company_registration_number"]
 
     if "ingredients" in info.keys():
-        ingredient_list = info["ingredients"]
-        info["ingredients"] = ""
-        for item in ingredient_list:
-            info["ingredients"] += str(item) + ", "
-    
-    if "products" in info.keys():
-        product_list = info["products"]
-        info["products"] = ""
-        for item in product_list:
-            info["products"] += str(item) + ", "
+        info["ingredients"] = ", ".join([item.name for item in info["ingredients"]])
+        info["producing_company"] = Company.objects.get(pk=info["producing_company"]).name
+
 
     context = {"type": type, "info": info}
 

@@ -9,8 +9,8 @@ from dal import autocomplete
 
 
 class SearchForm(forms.Form):
-    model = forms.ChoiceField(choices=[('Product', 'Product'), ('Ingredient', 'Ingredient'), ('Company', 'Company')], required=True, label="")
-    query = forms.CharField(label="", required=True)
+    model = forms.ChoiceField(choices=[('Product', 'Product'), ('Ingredient', 'Ingredient'), ('Company', 'Company')], required=True, label="", widget=forms.Select(attrs={'class':'form-select', "style":"width-max:auto;"}))
+    query = forms.CharField(label="search...", required=True, widget=forms.TextInput(attrs={'placeholder':"Search...", 'class':'form-control', 'type':'text'}))
 
 class SettingsForm(forms.ModelForm):
     class Meta:
