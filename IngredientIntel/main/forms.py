@@ -49,6 +49,13 @@ class NewCompanyForm(forms.ModelForm):
 
 
 class NewProductForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super(NewProductForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['warnings'].widget.attrs['class'] = 'form-control'
+        self.fields['notes'].widget.attrs['class'] = 'form-control'
+        self.fields['item_id'].widget.attrs['class'] = 'form-control'
+    
     class Meta:
         model = Product
         fields = ['ingredients', 'name', 'warnings', 'notes', 'item_id']
@@ -98,13 +105,15 @@ class ResearcherSignUpForm(UserCreationForm):
 class SCInoteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         researcher = kwargs.pop('researcher')
-        super().__init__(*args, **kwargs)
-
+        super(SCInoteForm, self).__init__(*args, **kwargs)
         self.fields['researcher'].initial = researcher # sets producing company on initialization
-
+        self.fields['research_credits'].widget.attrs['class'] = 'form-control'
+        self.fields['notes_content'].widget.attrs['class'] = 'form-control'
+        self.fields['citations'].widget.attrs['class'] = 'form-control'
+        
     class Meta:
         model = SCINote
-        fields = ('__all__')
+        fields = ( 'ingredient', 'research_credits', 'notes_content', 'citations', 'researcher')
         widgets = {
             'ingredient': autocomplete.ModelSelect2(url='ingredient-autocomplete'),
             'researcher': forms.HiddenInput()
