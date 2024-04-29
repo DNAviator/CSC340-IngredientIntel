@@ -501,7 +501,7 @@ def fetch_api_data(request, company_name):
             product_ingred = item['ingredients']
             print("hi")
 
-            if Product.objects.filter(item_id = upcId).count() == 0 :
+            if Product.objects.filter(item_id = upcId).count() == 0 and brandOwner.lower() == query.lower():
                 print()
                 product = Product(
                     name=product_name,
