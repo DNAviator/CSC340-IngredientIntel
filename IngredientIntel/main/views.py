@@ -486,20 +486,14 @@ def fetch_api_data(request, company_name):
     response = requests.get(url).json()
     print(type(response))
     response = response["foods"]
-    #print(response[0])
-    #response = response["fdcId"] 
-    #print("hello ", response)
-    #response = response[1]
-    print(response)
 
     max_items = 10
     for item in response :
-        if 'description' in item and 'brandOwner' in item and 'gtinUpc' in item and 'ingredients' in item:
+        if 'description' in item and 'brandName' in item and 'gtinUpc' in item and 'ingredients' in item:
             product_name = item['description']
-            brandOwner = item['brandOwner']
+            brandOwner = item['brandName']
             upcId = item['gtinUpc']
             product_ingred = item['ingredients']
-            print("hi")
 
             if Product.objects.filter(item_id = upcId).count() == 0 and brandOwner.lower() == query.lower():
                 print()
@@ -513,7 +507,8 @@ def fetch_api_data(request, company_name):
                 max_items += -1
                 product.save()
         if max_items == 0 :
-            break
+            messages.success(request, ("Items added")) # output sucess message
+            return redirect(f"/company/{query}")
 
     #the attributes of a product
 
@@ -536,6 +531,6 @@ def fetch_api_data(request, company_name):
     #    item_id=upcId, 
     #)
     #product.save()
-    messages.success(request, ("Item Successfuly Updated")) # output sucess message
+    messages.success(request, ("You have ran out of items to add")) # output sucess message
     return redirect(f"/company/{query}")
     return render(request, 'main/Ingredients.html',{'response':response})
