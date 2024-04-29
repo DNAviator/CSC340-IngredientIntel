@@ -479,30 +479,37 @@ def researcher_signup(request):
     form = ResearcherSignUpForm() 
     return render(request, "main/researcher_signup.html", {"form":form}) 
 
-def fetch_api_data(request):
-    query = 'lays'  
+def fetch_api_data(request, company_name):
+    query = company_name  
     url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6&query={query}'
     #url = 'https://api.nal.usda.gov/fdc/v1/food/1518547?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6'
     response = requests.get(url).json()
-    
-    response = response['foods'] 
-    print("hello")
-    print(response[0]['gtinUpc'])
+    print(type(response))
+    response = response["foods"]
+    #print(response[0])
+    #response = response["fdcId"] 
+    #print("hello ", response)
+    response = response[1]
+    print(response)
 
     #the attributes of a product
-    product_name = response[0]['description']
-    brandOwner = response[0]['brandOwner']
-    upcId = response[0]['gtinUpc']
+    product_name = response['description']
+    brandOwner = response['brandOwner']
+    upcId = response['gtinUpc']
+    product_ingred = response['ingredients']
+    
     #Finish attributes
 
-    company = Company.objects.create(
-    name=brandOwner,
-    date_founded=date(year=2000, month=1, day=1)  # Replace with the real date
-)
+
+#    company = Company.objects.create(
+#    name=brandOwner,
+#    date_founded=date(year=2000, month=1, day=1)  # Replace with the real date
+#)
+
 
     product = Product(
         name=product_name,
-        producing_company=company, 
+        producing_company=Company.objects.get(name=query), 
     #ingredients=ingredients,  
         warnings="May contain peanuts. Not recommended for people with peanut allergies.",
         notes="A delicious and crunchy snack!",

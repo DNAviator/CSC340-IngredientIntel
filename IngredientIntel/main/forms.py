@@ -140,3 +140,6 @@ class SCInoteForm(forms.ModelForm):
             'ingredient': autocomplete.ModelSelect2(url='ingredient-autocomplete'),
             'researcher': forms.HiddenInput()
         }
+
+class ApiForm(forms.ModelForm):
+    print()
