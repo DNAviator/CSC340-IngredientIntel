@@ -489,14 +489,31 @@ def fetch_api_data(request, company_name):
     #print(response[0])
     #response = response["fdcId"] 
     #print("hello ", response)
-    response = response[1]
+    #response = response[1]
     print(response)
 
+    max_items = 10
+    for item in response :
+        if 'description' in item and 'brandOwner' in item and 'gtinUpc' in item and 'ingredients' in item:
+            product_name = item['description']
+            brandOwner = item['brandOwner']
+            upcId = item['gtinUpc']
+            product_ingred = item['ingredients']
+            print("hi")
+            product = Product(
+                name=product_name,
+                producing_company=Company.objects.get(name=query), 
+                #ingredients=ingredients,  
+                warnings="May contain peanuts. Not recommended for people with peanut allergies.",
+                notes="A delicious and crunchy snack!",
+                item_id=upcId,)
+            max_items += -1
+            product.save()
+        if max_items == 0 :
+            break
+
     #the attributes of a product
-    product_name = response['description']
-    brandOwner = response['brandOwner']
-    upcId = response['gtinUpc']
-    product_ingred = response['ingredients']
+
     
     #Finish attributes
 
@@ -507,15 +524,15 @@ def fetch_api_data(request, company_name):
 #)
 
 
-    product = Product(
-        name=product_name,
-        producing_company=Company.objects.get(name=query), 
+    #product = Product(
+    #    name=product_name,
+    #    producing_company=Company.objects.get(name=query), 
     #ingredients=ingredients,  
-        warnings="May contain peanuts. Not recommended for people with peanut allergies.",
-        notes="A delicious and crunchy snack!",
-        item_id=upcId, 
-    )
-    product.save()
+    #    warnings="May contain peanuts. Not recommended for people with peanut allergies.",
+    #    notes="A delicious and crunchy snack!",
+    #    item_id=upcId, 
+    #)
+    #product.save()
     messages.success(request, ("Item Successfuly Updated")) # output sucess message
     return redirect(f"/company/{query}")
     return render(request, 'main/Ingredients.html',{'response':response})
