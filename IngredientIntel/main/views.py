@@ -21,6 +21,8 @@ import cv2
 from pyzbar.pyzbar import decode
 from dal import autocomplete
 import requests
+from datetime import date
+
 
 
 
@@ -478,15 +480,33 @@ def researcher_signup(request):
     return render(request, "main/researcher_signup.html", {"form":form}) 
 
 def fetch_api_data(request):
-    query = 'Peanuts'  
+    query = 'lays'  
     url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6&query={query}'
+    #url = 'https://api.nal.usda.gov/fdc/v1/food/1518547?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6'
     response = requests.get(url).json()
     
-    response = response['foods']
-    data = [
-        { 'description': food.get('description'),'brand_owner': food.get('brandOwner'), 'gtinUpc': food.get('gtinUpc')}
-        for food in response
-    ]
-    print(data)
-    
+    response = response['foods'] 
+    print("hello")
+    print(response[0]['gtinUpc'])
+
+    #the attributes of a product
+    product_name = response[0]['description']
+    brandOwner = response[0]['brandOwner']
+    upcId = response[0]['gtinUpc']
+    #Finish attributes
+
+    company = Company.objects.create(
+    name=brandOwner,
+    date_founded=date(year=2000, month=1, day=1)  # Replace with the real date
+)
+
+    product = Product(
+        name=product_name,
+        producing_company=company, 
+    #ingredients=ingredients,  
+        warnings="May contain peanuts. Not recommended for people with peanut allergies.",
+        notes="A delicious and crunchy snack!",
+        item_id=upcId, 
+    )
+    product.save()
     return render(request, 'main/Ingredients.html',{'response':response})
