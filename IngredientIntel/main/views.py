@@ -7,7 +7,6 @@ from django.apps import apps
 from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.utils.http import urlencode
-from .bar_decoder import barcode_decoder
 from django.forms.models import model_to_dict
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib import messages

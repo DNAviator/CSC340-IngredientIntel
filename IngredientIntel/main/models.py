@@ -111,19 +111,6 @@ class Product(models.Model):
         warnings (models.TextField): Any warnings associated with the product. This field is optional.
         notes (models.TextField): Additional notes or comments about the product from the producing company. This field is optional.
     """
-#will implement later
-    #def find_product(self, query) :
-
-
-    # # general search function
-    # def search_db(self, query):
-    #     # ranks all results with Levenshtein distance function to query
-    #     result = Product.objects.annotate(
-    #         rank= Cast(Levenshtein(Product.name, query), output_field=models.IntegerField())
-    #     ).order_by('rank')
-        
-    #     return result
-        # general search function
 
     def search_db(self, search_criteria, query):
         # ranks all results with Levenshtein distance function to query
