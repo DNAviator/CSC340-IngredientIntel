@@ -500,15 +500,18 @@ def fetch_api_data(request, company_name):
             upcId = item['gtinUpc']
             product_ingred = item['ingredients']
             print("hi")
-            product = Product(
-                name=product_name,
-                producing_company=Company.objects.get(name=query), 
-                #ingredients=ingredients,  
-                warnings="May contain peanuts. Not recommended for people with peanut allergies.",
-                notes="A delicious and crunchy snack!",
-                item_id=upcId,)
-            max_items += -1
-            product.save()
+
+            if Product.objects.filter(item_id = upcId).count() == 0 :
+                print()
+                product = Product(
+                    name=product_name,
+                    producing_company=Company.objects.get(name=query), 
+                    #ingredients=ingredients,  
+                    warnings="May contain peanuts. Not recommended for people with peanut allergies.",
+                    notes="A delicious and crunchy snack!",
+                    item_id=upcId,)
+                max_items += -1
+                product.save()
         if max_items == 0 :
             break
 
