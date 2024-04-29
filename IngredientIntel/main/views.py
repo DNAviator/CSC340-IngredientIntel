@@ -481,8 +481,12 @@ def fetch_api_data(request):
     query = 'Peanuts'  
     url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6&query={query}'
     response = requests.get(url).json()
-    response=response['foods']
     
+    response = response['foods']
+    data = [
+        { 'description': food.get('description'),'brand_owner': food.get('brandOwner'), 'gtinUpc': food.get('gtinUpc')}
+        for food in response
+    ]
+    print(data)
     
-    #print(response['foods'])
     return render(request, 'main/Ingredients.html',{'response':response})

@@ -44,7 +44,7 @@ class CsvToSql:
         # Write first row of sql to file
         sqlfile.write(self.base_sql + "\n")
         # Loop through remaining data rows and write INSERT statements
-        for row in reader:
+        for row in reader: # for row in the array
           # Format data based on data types
           formatted_data = [0 if value == "" or value == "#N/A" else value for value in row]
 
