@@ -9,10 +9,16 @@ from dal import autocomplete
 
 
 class SearchForm(forms.Form):
+    """
+    Form takes user input for either product, company, or ingredient, which is used to find an item of a similar name. 
+    """
     model = forms.ChoiceField(choices=[('Product', 'Product'), ('Ingredient', 'Ingredient'), ('Company', 'Company')], required=True, label="", widget=forms.Select(attrs={'class':'form-select', "style":"width-max:auto;"}))
     query = forms.CharField(label="search...", required=True, widget=forms.TextInput(attrs={'placeholder':"Search...", 'class':'form-control', 'type':'text'}))
 
 class SettingsForm(forms.ModelForm):
+    """
+    Form shows a users personal settings
+    """
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(SettingsForm, self).__init__(*args, **kwargs)
         self.fields['color_mode'].widget.attrs['class'] = 'form-select'
@@ -26,11 +32,16 @@ class SettingsForm(forms.ModelForm):
         
 
 class BarcodeForm(forms.Form):
-    #name = forms.CharField(widget=forms.TextInput(attrs={'class':'centerform'}))
+    """
+    Form that takes image from a user for barcode scanning
+    """
     image = forms.ImageField(widget=forms.FileInput(attrs={'class':'centerform'}))
     image.help_text = None
 
 class NewCompanyForm(forms.ModelForm):
+    """
+    Form takes parameters to create a new company
+    """
     class Meta:
         model = Company
         fields = ['name', 'date_founded', 'notes', 'company_registration_number', 'company_address']
@@ -49,6 +60,9 @@ class NewCompanyForm(forms.ModelForm):
 
 
 class NewProductForm(forms.ModelForm):
+    """
+    Form takes a companies input to create a new product
+    """
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(NewProductForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
@@ -64,6 +78,9 @@ class NewProductForm(forms.ModelForm):
         }
 
 class ConsumerCreationForm(UserCreationForm):
+    """
+    Form allows the creation of new users for our web app
+    """
     # error_css_class = 'alert alert-danger'
     # required_css_class = 'invalid-tooltip'
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
@@ -83,7 +100,9 @@ class ConsumerCreationForm(UserCreationForm):
             self.fields[fieldname].help_text = None
 
 class ResearcherSignUpForm(UserCreationForm):
-
+    """
+    Form allows the creation of new researchers
+    """
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
     last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'centerform'}))
     email = forms.EmailField(max_length=128, widget=forms.EmailInput()) 
@@ -103,6 +122,9 @@ class ResearcherSignUpForm(UserCreationForm):
             self.fields[fieldname].help_text = None
 
 class SCInoteForm(forms.ModelForm):
+    """
+    Form allows a researcher to add a science note to a corresponding ingredient 
+    """
     def __init__(self, *args, **kwargs):
         researcher = kwargs.pop('researcher')
         super(SCInoteForm, self).__init__(*args, **kwargs)
