@@ -48,7 +48,9 @@ def index(request):
     return render(request, "main/index.html")
 
 def search_page(request):
-
+    """
+    returns a page that shows a list of items with similar names to the users input.
+    """
     form = SearchForm(request.GET)
     if form.is_valid():
         # get model results based off get params
@@ -183,6 +185,9 @@ def sign_up(request):
     return render(request, "main/sign_up.html", {"form":form}) # render the page with the form
 
 def scan_barcode(request):      
+    """
+    displays a page that allows image input, which can be scanned for a barcode, which will then check if that barcode is in the database.
+    """
     context = {}
     if request.method == "POST":
         form = BarcodeForm(request.POST, request.FILES)
@@ -214,6 +219,9 @@ def scan_barcode(request):
     return render(request, "main/scan_barcode.html", context)
 
 def researcher_login(request):
+    """
+    returns a page that allows a researcher to sign in
+    """
     # redirect to home if user is already logged in else return html
     if request.user.is_authenticated:
         messages.success(request, ("You are already logged in, logout before attempting to login"))
@@ -233,6 +241,9 @@ def researcher_login(request):
     return render(request, "main/researcher_login.html")
 
 def researcher(request):
+    """
+    returns a page that allows a researcher to add research to ingredients in our database
+    """
     current_user = request.user
     if current_user.is_authenticated:
         if current_user.groups.filter(name = 'Researcher').exists():
@@ -256,6 +267,9 @@ def researcher(request):
     return redirect('researcher_login') # maybe not the cleanest solution
 
 def company(request, company):
+    """
+    returns a company page that allows companies to add, delete and modify products in the database
+    """
 
     company_object=Company.objects.get(name=company)
     if company_object.registered_users.filter(pk=request.user.pk).exists():
@@ -307,6 +321,9 @@ def update_item(request, model_type, item_id):
         redirect('home')
 
 def delete_product(request, model_type, item_id): 
+    """
+    Allows deletion of products
+    """
 
     model = apps.get_model(app_label='main', model_name=model_type)
     item_object = model.objects.filter(id=item_id)
@@ -342,7 +359,9 @@ def delete_product(request, model_type, item_id):
     return redirect('home')
 
 def update_backend(request, model_type, item_id):
-    
+    """
+    Does backed work to update a product or sci note
+    """
     if request.method == "POST":
         model = apps.get_model(app_label='main', model_name=model_type)
         item_object = model.objects.filter(id=item_id) # filter used to prevent crash
@@ -390,9 +409,15 @@ def update_backend(request, model_type, item_id):
     return redirect('home')
                 
 def about(request):
+    """
+    returns the about page
+    """
     return render(request, "main/about.html")
 
 def create_company(request):
+    """
+    returns page that allows a company to create a company object in the database
+    """
     if not request.user.is_authenticated:
         messages.success(request, ("Please Login First"))
         return redirect('login')
@@ -411,6 +436,10 @@ def create_company(request):
     return render(request, "main/company_signup.html", {"form": NewCompanyForm})
 
 def select_company(request):
+    """
+    returns the a page that allows a registered company user to choose what company they want to add products to.
+    This only shows the companies they are registered for
+    """
     # Get the current user and then do a reverse match on the related name of the registered user field of the company model
     if not request.user.is_authenticated:
         messages.success(request, ("Please Login First"))
@@ -421,6 +450,9 @@ def select_company(request):
     return render(request, "main/company_select.html", {"valid_companies": valid_companies})
 
 def researcher_signup(request):
+    """
+    returns a page that allows researchers to sign up
+    """
 
     # if user is logged in redirect to home with appropriate message
     if request.user.is_authenticated:
