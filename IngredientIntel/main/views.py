@@ -66,11 +66,13 @@ def search_page(request):
         paginator = Paginator(search_results, 25)                    # paginator class from django show 2 results of the model output
         page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
         page_obj = paginator.get_page(page_number)                  # paginator returns the page data
-        if request.user.is_authenticated:
-            flagged_ingredients = Profile.objects.get(pk = request.user.id).flagged_ingredients.all()
-            for item in page_obj:
-                if (item.ingredients.all() & flagged_ingredients):
-                    item.flag = True
+        print(search_model)
+        if search_model == 'Product':
+            if request.user.is_authenticated:
+                flagged_ingredients = Profile.objects.get(pk = request.user.id).flagged_ingredients.all()
+                for item in page_obj:
+                    if (item.ingredients.all() & flagged_ingredients):
+                        item.flag = True
 
 
         # render page (added params to keep search paramaters through the different pages.
