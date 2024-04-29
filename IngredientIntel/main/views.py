@@ -516,4 +516,6 @@ def fetch_api_data(request, company_name):
         item_id=upcId, 
     )
     product.save()
+    messages.success(request, ("Item Successfuly Updated")) # output sucess message
+    return redirect(f"/company/{query}")
     return render(request, 'main/Ingredients.html',{'response':response})
