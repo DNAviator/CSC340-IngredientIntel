@@ -485,11 +485,33 @@ def fetch_api_data(request, company_name):
     url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6&query={query}'
     #url = 'https://api.nal.usda.gov/fdc/v1/food/1518547?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6'
     response = requests.get(url).json()
-    print(type(response))
+    #print(response['foods'][0]['ingredients'])
+    
+    def parse_ingredient_list(text):
+        ingredients = [item.strip() for item in text.split(',')]
+
+        for ingredient_text in ingredients:
+    # Check if ingredient already exists (using Django models)
+            existing_ingredient = Ingredient.objects.filter(name=ingredient_text).exists()
+
+            if existing_ingredient==False:
+                ingredient_name= Ingredient(name=ingredient_text)
+                ingredient_name.save()
+                print("added")
+
+
+    
+    existing_ingredients = Ingredient.objects.filter(name='ingredient_name')
+    if existing_ingredients.exists():
+        print("Ingredient", 'ingredient_name', "exists in the database.")
+    else:
+        print("Ingredient", 'ingredient_name', "does not exist in the database.")
     response = response["foods"]
 
     max_items = 10
     for item in response :
+        print(parse_ingredient_list(item['ingredients']))
+
         if 'description' in item and 'brandName' in item and 'gtinUpc' in item and 'ingredients' in item:
             product_name = item['description']
             brandOwner = item['brandName']

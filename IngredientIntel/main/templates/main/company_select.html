@@ -18,6 +18,8 @@
         <h1>No companies found, contact your sys admin or register a new company</h1>
         <a class="btn btn-primary" type="button" href="{% url 'create_company' %}">Register a Company</a>
         {% endif %}
+        <h5>Add another company</h5>
+        <a class="btn btn-primary" type="button" href="{% url 'create_company' %}">Register a Company</a>
     </div>
 </div>
 {% endblock %}
