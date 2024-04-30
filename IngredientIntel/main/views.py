@@ -497,10 +497,12 @@ def fetch_api_data(request, company_name):
             if existing_ingredient==False:
                 ingredient_name= Ingredient(name=ingredient_text)
                 ingredient_name.save()
-                product.ingredients.add(ingredient_name)
+                ingred = Ingredient.objects.get(name=ingredient_text)
+                product.ingredients.add(ingred)
             else:
                 ingred = Ingredient.objects.get(name=ingredient_text)
                 product.ingredients.add(ingred)
+
 
 
     
