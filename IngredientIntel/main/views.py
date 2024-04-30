@@ -483,23 +483,21 @@ def researcher_signup(request):
 def fetch_api_data(request, company_name):
     query = company_name  
     url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6&query={query}'
-    #url = 'https://api.nal.usda.gov/fdc/v1/food/1518547?api_key=EOcBurjhuDFV9xf0NhZtNgMxQhzZ2YTu4NqeZ0b6'
     response = requests.get(url).json()
-    #print(response['foods'][0]['ingredients'])
     
     def parse_ingredient_list(text,product):
-        ingredients = [item.strip() for item in text.split(',')]
+        ingredients = [item.strip() for item in text.split(',')] #Parse through the ingredient list and remove the commas
 
         for ingredient_text in ingredients:
-    # Check if ingredient already exists (using Django models)
+    # Check if ingredient already exists
             existing_ingredient = Ingredient.objects.filter(name=ingredient_text).exists()
             
-            if existing_ingredient==False:
+            if existing_ingredient==False: #If the ingredient does not already exist, add the ingredient to the Ingredients and add the ingredient to the product
                 ingredient_name= Ingredient(name=ingredient_text)
                 ingredient_name.save()
                 ingred = Ingredient.objects.get(name=ingredient_text)
                 product.ingredients.add(ingred)
-            else:
+            else:#If the ingredient already exists, add the ingredient to the product
                 ingred = Ingredient.objects.get(name=ingredient_text)
                 product.ingredients.add(ingred)
 
@@ -517,16 +515,14 @@ def fetch_api_data(request, company_name):
             product_name = item['description']
             brandOwner = item['brandName']
             upcId = item['gtinUpc']
-            product_ingred = item['ingredients']
             
 
             if Product.objects.filter(item_id = upcId).count() == 0 and brandOwner.lower() == query.lower():
                 product = Product(
                     name=product_name,
                     producing_company=Company.objects.get(name=query), 
-                    #ingredients=ingredients,  
-                    warnings="May contain peanuts. Not recommended for people with peanut allergies.",
-                    notes="A delicious and crunchy snack!",
+                    warnings="",
+                    notes="",
                     item_id=upcId,)
                 max_items += -1
                 product.save()
@@ -539,4 +535,3 @@ def fetch_api_data(request, company_name):
    
     messages.success(request, ("You have ran out of items to add")) # output sucess message
     return redirect(f"/company/{query}")
-    return render(request, 'main/Ingredients.html',{'response':response})
