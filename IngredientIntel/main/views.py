@@ -384,7 +384,7 @@ def update_backend(request, model_type, item_id):
             
             form = NewProductForm(request.POST) # create filled in form to pass to view
             if form.is_valid():
-                form.instance.producing_company = company_object.id
+                form.instance.producing_company = company_object
                 item_object.delete()
                 form.save()
                 messages.success(request, ("Item Successfuly Updated")) # output sucess message
