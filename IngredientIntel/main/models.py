@@ -125,7 +125,7 @@ class Product(models.Model):
     ingredients = models.ManyToManyField(Ingredient)
     warnings = models.TextField(blank=True)
     notes = models.TextField(blank=True)
-    item_id = models.CharField(blank=True, max_length=255)
+    item_id = models.CharField(blank=True, max_length=255, unique=True)
 
     def __str__(self):
         """Return a human-readable representation of the product object."""
