@@ -7,10 +7,11 @@
     <p>Upload an image containing the barcode you want to scan:</p>
     <!-- used to go to search page, and was a post request. action="{ url 'result_page' model  }" -->
 
-    <form method="POST" enctype="multipart/form-data">
+      
+    <form class="input-group mb-3" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
+        {{ form.image }}
+        <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Submit</button>
     </form>
 
 </div>

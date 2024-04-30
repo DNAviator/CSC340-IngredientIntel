@@ -35,7 +35,7 @@ class BarcodeForm(forms.Form):
     """
     Form that takes image from a user for barcode scanning
     """
-    image = forms.ImageField(widget=forms.FileInput(attrs={'class':'centerform'}))
+    image = forms.ImageField(label="", widget=forms.FileInput(attrs={'class':'form-control'}))
     image.help_text = None
 
 class NewCompanyForm(forms.ModelForm):
@@ -140,6 +140,3 @@ class SCInoteForm(forms.ModelForm):
             'ingredient': autocomplete.ModelSelect2(url='ingredient-autocomplete'),
             'researcher': forms.HiddenInput()
         }
-
-class ApiForm(forms.ModelForm):
-    print()
