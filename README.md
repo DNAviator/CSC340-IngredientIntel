@@ -34,9 +34,9 @@ Forget deciphering long and confusing labels! Ingredient Intel (INI), a revoluti
     d. At this point you should be able to run the server by navigating to the IngredientIntel directory and
         using the command "python manage.py runserver" do so to test for errors  
     e. After stopping the server (with break or ctr+c) run these commands:  
-        python manage.py migrate  
-        python manage.py makemigrations main  
-        python manage.py migrate  
+        - python manage.py migrate  
+        - python manage.py makemigrations main  
+        - python manage.py migrate  
     f. At this point your database should be setup and the server ready to use, you may want to create an admin account
         however and to do so stop the server and run the command: "python manage.py createsuperuser" which will prompt you in setting up an admin  
 6. You are ready to go! (note you may need to replace the api key found in views.py with a new one from the FDC api to have api functionality)  
