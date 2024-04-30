@@ -527,6 +527,12 @@ def fetch_api_data(request, company_name):
                 max_items += -1
                 product.save()
                 parse_ingredient_list(item['ingredients'],product)
+                existing_product = Product.objects.filter(name=product_name).exists()
+                if existing_product == False:
+                    product_add_to_company = Product.objects.get(name=product_name)
+                    print(product_add_to_company)
+                    company_name=Company.objects.get(name=query)
+                    company_name.products.add(product_add_to_company)
                 
         if max_items == 0 :
             messages.success(request, ("Items added")) # output sucess message
