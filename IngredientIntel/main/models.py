@@ -51,7 +51,7 @@ class Ingredient(models.Model):
             rank = Cast(Levenshtein(F(search_criteria), query), output_field=models.IntegerField())
         ).order_by('rank')
 
-        return result
+        return result.filter(name__icontains=query)
 
     def __str__(self):
         """Return a human-readable representation of the ingredient object."""
@@ -86,8 +86,7 @@ class Company(models.Model):
         result = Company.objects.annotate(
             rank = Cast(Levenshtein(F(search_criteria), query), output_field=models.IntegerField())
         ).order_by('rank')
-
-        return result
+        return result.filter(name__icontains=query)
 
     class Meta:
         verbose_name = "Company"
@@ -118,7 +117,7 @@ class Product(models.Model):
             rank = Cast(Levenshtein(F(search_criteria), query), output_field=models.IntegerField())
         ).order_by('rank')
 
-        return result
+        return result.filter(name__icontains=query)
 
 
     name = models.CharField(max_length=255)

@@ -61,7 +61,6 @@ def search_page(request):
 
         model_obj = apps.get_model('main', search_model)
         search_results = model_obj.search_db(model_obj, "name", search_query)
-
         # create paginator to manage the multiple pages of results
         paginator = Paginator(search_results, 25)                    # paginator class from django show 2 results of the model output
         page_number = request.GET.get("page", 1)                    # get the current page of results or 1 if none
