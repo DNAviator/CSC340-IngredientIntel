@@ -503,8 +503,7 @@ def fetch_api_data(request, company_name):
                     name=product_name,
                     producing_company=Company.objects.get(name=query), 
                     #ingredients=ingredients,  
-                    warnings="May contain peanuts. Not recommended for people with peanut allergies.",
-                    notes="A delicious and crunchy snack!",
+
                     item_id=upcId,)
                 max_items += -1
                 product.save()
