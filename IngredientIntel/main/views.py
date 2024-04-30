@@ -487,39 +487,38 @@ def fetch_api_data(request, company_name):
     response = requests.get(url).json()
     #print(response['foods'][0]['ingredients'])
     
-    def parse_ingredient_list(text):
+    def parse_ingredient_list(text,product):
         ingredients = [item.strip() for item in text.split(',')]
 
         for ingredient_text in ingredients:
     # Check if ingredient already exists (using Django models)
             existing_ingredient = Ingredient.objects.filter(name=ingredient_text).exists()
-
+            
             if existing_ingredient==False:
                 ingredient_name= Ingredient(name=ingredient_text)
                 ingredient_name.save()
-                print("added")
+                product.ingredients.add(ingredient_name)
+            else:
+                ingred = Ingredient.objects.get(name=ingredient_text)
+                product.ingredients.add(ingred)
 
 
     
-    existing_ingredients = Ingredient.objects.filter(name='ingredient_name')
-    if existing_ingredients.exists():
-        print("Ingredient", 'ingredient_name', "exists in the database.")
-    else:
-        print("Ingredient", 'ingredient_name', "does not exist in the database.")
+    
     response = response["foods"]
 
     max_items = 10
     for item in response :
-    
+        
+
         if 'description' in item and 'brandName' in item and 'gtinUpc' in item and 'ingredients' in item:
-            # print(parse_ingredient_list(item['ingredients']))
             product_name = item['description']
             brandOwner = item['brandName']
             upcId = item['gtinUpc']
             product_ingred = item['ingredients']
+            
 
             if Product.objects.filter(item_id = upcId).count() == 0 and brandOwner.lower() == query.lower():
-                print()
                 product = Product(
                     name=product_name,
                     producing_company=Company.objects.get(name=query), 
@@ -529,31 +528,13 @@ def fetch_api_data(request, company_name):
                     item_id=upcId,)
                 max_items += -1
                 product.save()
+                parse_ingredient_list(item['ingredients'],product)
+                
         if max_items == 0 :
             messages.success(request, ("Items added")) # output sucess message
             return redirect(f"/company/{query}")
 
-    #the attributes of a product
-
-    
-    #Finish attributes
-
-
-#    company = Company.objects.create(
-#    name=brandOwner,
-#    date_founded=date(year=2000, month=1, day=1)  # Replace with the real date
-#)
-
-
-    #product = Product(
-    #    name=product_name,
-    #    producing_company=Company.objects.get(name=query), 
-    #ingredients=ingredients,  
-    #    warnings="May contain peanuts. Not recommended for people with peanut allergies.",
-    #    notes="A delicious and crunchy snack!",
-    #    item_id=upcId, 
-    #)
-    #product.save()
+   
     messages.success(request, ("You have ran out of items to add")) # output sucess message
     return redirect(f"/company/{query}")
     return render(request, 'main/Ingredients.html',{'response':response})
