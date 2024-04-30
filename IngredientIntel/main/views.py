@@ -510,9 +510,9 @@ def fetch_api_data(request, company_name):
 
     max_items = 10
     for item in response :
-        print(parse_ingredient_list(item['ingredients']))
-
+    
         if 'description' in item and 'brandName' in item and 'gtinUpc' in item and 'ingredients' in item:
+            # print(parse_ingredient_list(item['ingredients']))
             product_name = item['description']
             brandOwner = item['brandName']
             upcId = item['gtinUpc']

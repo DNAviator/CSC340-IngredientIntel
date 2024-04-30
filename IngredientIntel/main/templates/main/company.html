@@ -45,7 +45,7 @@
                 <table class="table table-hover table-borderless">
                     <tbody>
                         {% for product in products %}
-                        <tr>
+                        <tr class="product-row">
                             <td>{{ product.name }}</td>
                             <td style="width: fit-content"><a href="{% url 'update' 'product' product.id %}">Update</a>
                                 <br> <a href="{% url 'delete' 'product' product.id %}">Delete</a>
@@ -86,7 +86,7 @@
     const searchBox = document.getElementById('search-box');
     const productRows = document.querySelectorAll('.product-row');
 
-    searchBox.addEventListener('change', () => {
+    searchBox.addEventListener('input', () => {
         const searchTerm = searchBox.value.toLowerCase(); // Get and lowercase search term
 
         productRows.forEach(row => {

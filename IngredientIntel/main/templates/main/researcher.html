@@ -19,13 +19,11 @@
 <div class="container">
     <form class="row mb-3 align-items-start">
         <div class="col-8">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for Specific Products..."
-                    aria-label="Recipient's username with two button addons">
-                <button class="btn btn-outline-secondary" type="button">Search</button>
+
+            <input type="text" id="search-box" class="form-control" placeholder="Search for Specific Scientific Notes..."
+                aria-label="Recipient's username with two button addons">
 
 
-            </div>
         </div>
     </form>
     <div class="row">
@@ -37,9 +35,10 @@
                 <table class="table table-hover">
                     <tbody>
                         {% for note in notes %}
-                        <tr>
+                        <tr class="product-row">
                             <td>Ingredient: {{ note.ingredient }}</td>
-                            <td><a href="{% url 'update' 'sciNote' note.id %}">Update</a> | <a href="{% url 'delete' 'sciNote' note.id %}">Delete</a></td>
+                            <td><a href="{% url 'update' 'sciNote' note.id %}">Update</a> | <a
+                                    href="{% url 'delete' 'sciNote' note.id %}">Delete</a></td>
                         </tr>
                         <tr>
                             <td colspan="2">Content: {{ note.notes_content }}</td>
@@ -56,7 +55,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="POST" >
+                    <form method="POST">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <input class="btn btn-primary mb-3" type="submit" value="Add Scientific Note">
@@ -74,23 +73,38 @@
 {{ form.media }}
 
 <script>
-(function($) {
-    $('#add-form').click(function() {
-        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
-        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
-        newTable.find(':input').each(function() {
-            for (attr of ['name', 'id'])
-                $(this).attr(
-                    attr,
-                    $(this).attr(attr).replace('__prefix__', index)
-                )
+
+    const searchBox = document.getElementById('search-box');
+    const productRows = document.querySelectorAll('.product-row');
+
+    searchBox.addEventListener('input', () => {
+        const searchTerm = searchBox.value.toLowerCase(); // Get and lowercase search term
+
+        productRows.forEach(row => {
+            const productName = row.querySelector('td').textContent.toLowerCase(); // Get and lowercase product name
+            const match = productName.includes(searchTerm); // Check for match
+
+            row.style.display = match ? 'table-row' : 'none'; // Show/hide based on match
+        });
+    });
+
+    (function ($) {
+        $('#add-form').click(function () {
+            var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+            var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+            newTable.find(':input').each(function () {
+                for (attr of ['name', 'id'])
+                    $(this).attr(
+                        attr,
+                        $(this).attr(attr).replace('__prefix__', index)
+                    )
+            })
+            newTable.insertBefore($(this))
+            $('#id_inline_test_models-TOTAL_FORMS').val(
+                parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+            )
+            newTable.slideDown()
         })
-        newTable.insertBefore($(this))
-        $('#id_inline_test_models-TOTAL_FORMS').val(
-            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
-        )
-        newTable.slideDown()
-    })
-})($)
+    })($)
 </script>
 {% endblock %}
